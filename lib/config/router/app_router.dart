@@ -5,7 +5,7 @@ import '../../features/presentation/pages/dashboard/dashboard_part.dart';
 import '../../features/presentation/pages/main_shell_page.dart';
 import '../../features/presentation/pages/alerts/alerts_page.dart';
 import '../../features/presentation/pages/map/map_part.dart';
-import '../../features/presentation/pages/settings/settings_page.dart';
+import '../../features/presentation/pages/settings/settings_part.dart';
 
 /// Route nomlari
 abstract class AppRoutes {

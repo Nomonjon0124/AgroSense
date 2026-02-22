@@ -1,12 +1,12 @@
 part of '../dashboard_part.dart';
 
-mixin DashboardMixin on State<DashboardView>{
+mixin DashboardMixin on State<DashboardView> {
   Widget _buildContent(
-      BuildContext context,
-      DashboardData data, {
-        bool isLoading = false,
-        String? errorMessage,
-      }) {
+    BuildContext context,
+    DashboardData data, {
+    bool isLoading = false,
+    String? errorMessage,
+  }) {
     final currentWeather = data.currentWeather;
     final dailyWeather = data.dailyWeather;
 
