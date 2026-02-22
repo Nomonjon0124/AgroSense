@@ -319,23 +319,7 @@ lib/
 Savollar yoki takliflar bo'lsa, bog'laning:
 
 - 📧 Email: nomonojont@gmail.com
-- 💬 Telegram: [@yourusername](https://t.me/nomonjon_toychiyev)
+- 💬 Telegram: [@nomonjon_toychiyev](https://t.me/nomonjon_toychiyev)
 - 🐛 Issue: [GitHub Issues](https://github.com/Nomonjon0124/AgroSense)
 
 ---
-
-## 🔗 Foydali havolalar
-
-- [Flutter Documentation](https://docs.flutter.dev/)
-- [Dart Documentation](https://dart.dev/guides)
-- [Riverpod Documentation](https://riverpod.dev/)
-- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-- [TATU Official Website](https://tuit.uz/)
-
----
-
-<div align="center">
-
-**⭐ Agar loyiha yoqsa, GitHub'da star bering! ⭐**
-
-</div>
