@@ -491,13 +491,15 @@ class _AgroOverviewCardState extends State<AgroOverviewCard>
   String _getWeatherLabel(String condition) {
     final lower = condition.toLowerCase();
     if (lower.contains('clear')) return 'Ochiq havo';
-    if (lower.contains('few') || lower.contains('partly'))
+    if (lower.contains('few') || lower.contains('partly')) {
       return 'Qisman bulutli';
+    }
     if (lower.contains('scattered')) return 'Bulutli';
     if (lower.contains('broken')) return 'Qisman bulutli';
     if (lower.contains('overcast')) return 'To\'liq bulutli';
-    if (lower.contains('rain') || lower.contains('drizzle'))
+    if (lower.contains('rain') || lower.contains('drizzle')) {
       return 'Yomg\'irli';
+    }
     if (lower.contains('snow')) return 'Qorli';
     if (lower.contains('thunder')) return 'Momaqaldiroq';
     if (lower.contains('fog') || lower.contains('mist')) return 'Tumanli';

@@ -1,4 +1,4 @@
-﻿import 'package:equatable/equatable.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 class AppSettingsState extends Equatable {
@@ -13,7 +13,7 @@ class AppSettingsState extends Equatable {
   });
 
   const AppSettingsState.initial()
-    : themeMode = ThemeMode.system,
+    : themeMode = ThemeMode.light,
       locale = const Locale('uz'),
       initialized = false;
 
@@ -32,4 +32,3 @@ class AppSettingsState extends Equatable {
   @override
   List<Object?> get props => [themeMode, locale, initialized];
 }
-

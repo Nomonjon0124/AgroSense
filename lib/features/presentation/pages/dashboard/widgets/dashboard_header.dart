@@ -4,7 +4,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_styles.dart';
-import '../../../../../core/extensions/text_extensions.dart';
 
 /// Dashboard header widgeti
 /// Salomlashish, joylashuv va offline status ko'rsatadi

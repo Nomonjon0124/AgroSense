@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 abstract class AppSettingsRepository {
   Future<ThemeMode> getThemeMode();
@@ -8,6 +8,18 @@ abstract class AppSettingsRepository {
   Future<Locale> getLocale();
 
   Future<void> setLocale(Locale locale);
+
+  Future<bool> getNotificationsEnabled();
+
+  Future<void> setNotificationsEnabled(bool value);
+
+  Future<bool> getAutoSyncOnWifi();
+
+  Future<void> setAutoSyncOnWifi(bool value);
+
+  Future<DateTime?> getLastManualSyncAt();
+
+  Future<void> setLastManualSyncAt(DateTime value);
 }
 
 ThemeMode themeModeFromCode(String? code) {
@@ -16,9 +28,9 @@ ThemeMode themeModeFromCode(String? code) {
       return ThemeMode.light;
     case 'dark':
       return ThemeMode.dark;
-    case 'system':
     default:
-      return ThemeMode.system;
+      // "system" and unknown legacy values fallback to light.
+      return ThemeMode.light;
   }
 }
 
@@ -29,7 +41,7 @@ String themeModeToCode(ThemeMode mode) {
     case ThemeMode.dark:
       return 'dark';
     case ThemeMode.system:
-      return 'system';
+      return 'light';
   }
 }
 
@@ -44,4 +56,3 @@ Locale localeFromCode(String? code) {
       return const Locale('uz');
   }
 }
-

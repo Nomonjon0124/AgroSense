@@ -7,7 +7,40 @@
   "routerNotFoundTitle": "Страница не найдена",
   "routerBackHome": "Вернуться на главную",
   "settingsTitle": "Настройки",
+  "appPreferences": "Параметры приложения",
   "settingsSubtitle": "Управление параметрами",
+  "languageAndRegion": "Язык и регион",
+  "offlineDataManager": "Менеджер офлайн-данных",
+  "localStorage": "Локальное хранилище",
+  "manageOfflineMaps": "Управляйте офлайн-картами",
+  "cleanUp": "Очистить",
+  "usedStorage": "Использовано: {value}",
+  "@usedStorage": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "availableStorage": "Доступно: {value}",
+  "@availableStorage": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "autoSyncWifi": "Автосинхронизация по Wi‑Fi",
+  "syncNow": "Синхронизировать",
+  "darkMode": "Тёмный режим",
+  "versionBuild": "Версия {version} (Сборка {build})",
+  "@versionBuild": {
+    "placeholders": {
+      "version": {},
+      "build": {}
+    }
+  },
+  "syncFailedOffline": "Нет подключения к интернету. Синхронизация не выполнена.",
+  "syncFailedGeneric": "Синхронизация не удалась. Повторите попытку.",
+  "syncPartialFailure": "Часть данных не удалось синхронизировать.",
+  "notificationsOn": "Вкл",
+  "notificationsOff": "Выкл",
   "appearance": "Внешний вид",
   "general": "Общие",
   "appTheme": "Тема приложения",

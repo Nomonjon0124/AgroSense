@@ -5,8 +5,10 @@ import 'package:hive_ce_flutter/hive_flutter.dart';
 import '../settings/app_settings_cubit.dart';
 import '../settings/app_settings_repository.dart';
 import '../settings/hive_app_settings_repository.dart';
+import '../settings/storage_stats_service.dart';
 import '../../features/presentation/bloc/dashboard/dashboard_bloc.dart';
 import '../../features/presentation/bloc/map/map_bloc.dart';
+import '../../features/presentation/bloc/settings/settings_bloc.dart';
 import '../../features/weather/data/datasources/open_meteo_remote_datasource.dart';
 import '../../features/weather/data/datasources/soil_grids_remote_datasource.dart';
 import '../../features/weather/data/datasources/soil_properties_local_datasource.dart';
@@ -32,7 +34,9 @@ class InjectionContainer {
     sl.registerLazySingleton<Connectivity>(() => Connectivity());
 
     // Network Info
-    sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl<Connectivity>()));
+    sl.registerLazySingleton<NetworkInfo>(
+      () => NetworkInfoImpl(sl<Connectivity>()),
+    );
 
     // Location Service
     sl.registerLazySingleton<LocationService>(() => LocationServiceImpl());
@@ -52,12 +56,24 @@ class InjectionContainer {
       () => AppSettingsCubit(repository: sl<AppSettingsRepository>()),
     );
 
+    sl.registerLazySingleton<StorageStatsService>(
+      () => StorageStatsService(
+        weatherBox: sl<Box<dynamic>>(instanceName: 'weatherBox'),
+        soilMoistureBox: sl<Box<dynamic>>(instanceName: 'soilMoistureBox'),
+        soilPropertiesBox: sl<Box<dynamic>>(instanceName: 'soilPropertiesBox'),
+      ),
+    );
+
     // ==================== DATA SOURCES ====================
 
     // Remote Data Sources
-    sl.registerLazySingleton<OpenMeteoRemoteDataSource>(() => OpenMeteoRemoteDataSourceImpl(networkInfo: sl<NetworkInfo>()));
+    sl.registerLazySingleton<OpenMeteoRemoteDataSource>(
+      () => OpenMeteoRemoteDataSourceImpl(networkInfo: sl<NetworkInfo>()),
+    );
 
-    sl.registerLazySingleton<SoilGridsRemoteDataSource>(() => SoilGridsRemoteDataSourceImpl(networkInfo: sl<NetworkInfo>()));
+    sl.registerLazySingleton<SoilGridsRemoteDataSource>(
+      () => SoilGridsRemoteDataSourceImpl(networkInfo: sl<NetworkInfo>()),
+    );
 
     // Local Data Sources
     sl.registerLazySingleton<WeatherLocalDataSource>(
@@ -68,7 +84,9 @@ class InjectionContainer {
     );
 
     sl.registerLazySingleton<SoilPropertiesLocalDataSource>(
-      () => SoilPropertiesLocalDataSourceImpl(soilPropertiesBox: sl<Box<dynamic>>(instanceName: 'soilPropertiesBox')),
+      () => SoilPropertiesLocalDataSourceImpl(
+        soilPropertiesBox: sl<Box<dynamic>>(instanceName: 'soilPropertiesBox'),
+      ),
     );
 
     // ==================== REPOSITORIES ====================
@@ -101,7 +119,23 @@ class InjectionContainer {
     );
 
     sl.registerFactory<MapBloc>(
-      () => MapBloc(locationService: sl<LocationService>(), networkInfo: sl<NetworkInfo>(), connectivity: sl<Connectivity>()),
+      () => MapBloc(
+        locationService: sl<LocationService>(),
+        networkInfo: sl<NetworkInfo>(),
+        connectivity: sl<Connectivity>(),
+      ),
+    );
+
+    sl.registerFactory<SettingsBloc>(
+      () => SettingsBloc(
+        appSettingsCubit: sl<AppSettingsCubit>(),
+        appSettingsRepository: sl<AppSettingsRepository>(),
+        weatherRepository: sl<WeatherRepository>(),
+        soilPropertiesRepository: sl<SoilPropertiesRepository>(),
+        locationService: sl<LocationService>(),
+        networkInfo: sl<NetworkInfo>(),
+        storageStatsService: sl<StorageStatsService>(),
+      ),
     );
   }
 
@@ -118,8 +152,14 @@ class InjectionContainer {
 
     // Box'larni GetIt'ga ro'yxatdan o'tkazish
     sl.registerSingleton<Box<dynamic>>(weatherBox, instanceName: 'weatherBox');
-    sl.registerSingleton<Box<dynamic>>(soilMoistureBox, instanceName: 'soilMoistureBox');
-    sl.registerSingleton<Box<dynamic>>(soilPropertiesBox, instanceName: 'soilPropertiesBox');
+    sl.registerSingleton<Box<dynamic>>(
+      soilMoistureBox,
+      instanceName: 'soilMoistureBox',
+    );
+    sl.registerSingleton<Box<dynamic>>(
+      soilPropertiesBox,
+      instanceName: 'soilPropertiesBox',
+    );
     sl.registerSingleton<Box<dynamic>>(
       appSettingsBox,
       instanceName: 'appSettingsBox',
@@ -130,7 +170,9 @@ class InjectionContainer {
   static Future<void> clearAllCaches() async {
     final weatherBox = sl<Box<dynamic>>(instanceName: 'weatherBox');
     final soilMoistureBox = sl<Box<dynamic>>(instanceName: 'soilMoistureBox');
-    final soilPropertiesBox = sl<Box<dynamic>>(instanceName: 'soilPropertiesBox');
+    final soilPropertiesBox = sl<Box<dynamic>>(
+      instanceName: 'soilPropertiesBox',
+    );
     final appSettingsBox = sl<Box<dynamic>>(instanceName: 'appSettingsBox');
 
     await weatherBox.clear();
@@ -152,16 +194,21 @@ class StorageKeys {
   // Weather keys
   static String weatherKey(double lat, double lon) => 'weather_${lat}_$lon';
 
-  static String soilMoistureKey(double lat, double lon) => 'soil_moisture_${lat}_$lon';
+  static String soilMoistureKey(double lat, double lon) =>
+      'soil_moisture_${lat}_$lon';
 
-  static String soilPropertiesKey(double lat, double lon) => 'soil_properties_${lat}_$lon';
+  static String soilPropertiesKey(double lat, double lon) =>
+      'soil_properties_${lat}_$lon';
 
   // Timestamp keys
-  static String weatherTimestamp(double lat, double lon) => 'weather_ts_${lat}_$lon';
+  static String weatherTimestamp(double lat, double lon) =>
+      'weather_ts_${lat}_$lon';
 
-  static String soilMoistureTimestamp(double lat, double lon) => 'soil_moisture_ts_${lat}_$lon';
+  static String soilMoistureTimestamp(double lat, double lon) =>
+      'soil_moisture_ts_${lat}_$lon';
 
-  static String soilPropertiesTimestamp(double lat, double lon) => 'soil_props_ts_${lat}_$lon';
+  static String soilPropertiesTimestamp(double lat, double lon) =>
+      'soil_props_ts_${lat}_$lon';
 
   // Cache duration (milliseconds)
   static const int weatherCacheDuration = 30 * 60 * 1000; // 30 daqiqa

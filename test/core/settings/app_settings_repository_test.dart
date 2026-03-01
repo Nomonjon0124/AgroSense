@@ -28,9 +28,15 @@ void main() {
     test('returns default values when storage is empty', () async {
       final themeMode = await repository.getThemeMode();
       final locale = await repository.getLocale();
+      final notificationsEnabled = await repository.getNotificationsEnabled();
+      final autoSyncOnWifi = await repository.getAutoSyncOnWifi();
+      final lastSync = await repository.getLastManualSyncAt();
 
-      expect(themeMode, ThemeMode.system);
+      expect(themeMode, ThemeMode.light);
       expect(locale.languageCode, 'uz');
+      expect(notificationsEnabled, isTrue);
+      expect(autoSyncOnWifi, isTrue);
+      expect(lastSync, isNull);
     });
 
     test('persists and reads theme mode', () async {
@@ -50,7 +56,22 @@ void main() {
     test('theme mode mapping functions are stable', () {
       expect(themeModeToCode(ThemeMode.light), 'light');
       expect(themeModeFromCode('dark'), ThemeMode.dark);
+      expect(themeModeFromCode('system'), ThemeMode.light);
       expect(localeFromCode('en').languageCode, 'en');
+    });
+
+    test('persists extra settings values', () async {
+      final now = DateTime.now();
+      await repository.setNotificationsEnabled(false);
+      await repository.setAutoSyncOnWifi(false);
+      await repository.setLastManualSyncAt(now);
+
+      expect(await repository.getNotificationsEnabled(), isFalse);
+      expect(await repository.getAutoSyncOnWifi(), isFalse);
+      expect(
+        (await repository.getLastManualSyncAt())!.millisecondsSinceEpoch,
+        now.millisecondsSinceEpoch,
+      );
     });
   });
 }

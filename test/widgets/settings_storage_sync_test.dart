@@ -19,60 +19,53 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-class _TestSettingsRepository implements AppSettingsRepository {
+class _Repo implements AppSettingsRepository {
   ThemeMode mode = ThemeMode.light;
   Locale locale = const Locale('en');
-  bool notifications = true;
+  bool notificationsEnabled = true;
   bool autoSync = true;
   DateTime? lastSync;
-
-  @override
-  Future<Locale> getLocale() async => locale;
-
-  @override
-  Future<ThemeMode> getThemeMode() async => mode;
-
-  @override
-  Future<void> setLocale(Locale locale) async {
-    this.locale = locale;
-  }
-
-  @override
-  Future<void> setThemeMode(ThemeMode mode) async {
-    this.mode = mode;
-  }
-
-  @override
-  Future<bool> getNotificationsEnabled() async => notifications;
-
-  @override
-  Future<void> setNotificationsEnabled(bool value) async {
-    notifications = value;
-  }
 
   @override
   Future<bool> getAutoSyncOnWifi() async => autoSync;
 
   @override
-  Future<void> setAutoSyncOnWifi(bool value) async {
-    autoSync = value;
-  }
+  Future<Locale> getLocale() async => locale;
 
   @override
   Future<DateTime?> getLastManualSyncAt() async => lastSync;
 
   @override
-  Future<void> setLastManualSyncAt(DateTime value) async {
-    lastSync = value;
-  }
+  Future<bool> getNotificationsEnabled() async => notificationsEnabled;
+
+  @override
+  Future<ThemeMode> getThemeMode() async => mode;
+
+  @override
+  Future<void> setAutoSyncOnWifi(bool value) async => autoSync = value;
+
+  @override
+  Future<void> setLastManualSyncAt(DateTime value) async => lastSync = value;
+
+  @override
+  Future<void> setLocale(Locale locale) async => this.locale = locale;
+
+  @override
+  Future<void> setNotificationsEnabled(bool value) async =>
+      notificationsEnabled = value;
+
+  @override
+  Future<void> setThemeMode(ThemeMode mode) async => this.mode = mode;
 }
 
-class _FakeWeatherRepository implements WeatherRepository {
+class _WeatherRepo implements WeatherRepository {
+  int weatherCalls = 0;
+  int soilCalls = 0;
+
   @override
   Future<void> clearCache() async {}
 
@@ -101,8 +94,17 @@ class _FakeWeatherRepository implements WeatherRepository {
     required double longitude,
     int forecastDays = 7,
     bool forceRefresh = false,
-  }) {
-    throw UnimplementedError();
+  }) async {
+    soilCalls++;
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+    return Right(
+      SoilMoistureEntity(
+        latitude: latitude,
+        longitude: longitude,
+        elevation: 0,
+        timezone: 'UTC',
+      ),
+    );
   }
 
   @override
@@ -111,8 +113,17 @@ class _FakeWeatherRepository implements WeatherRepository {
     required double longitude,
     int forecastDays = 7,
     bool forceRefresh = false,
-  }) {
-    throw UnimplementedError();
+  }) async {
+    weatherCalls++;
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+    return Right(
+      WeatherEntity(
+        latitude: latitude,
+        longitude: longitude,
+        elevation: 0,
+        timezone: 'UTC',
+      ),
+    );
   }
 
   @override
@@ -120,7 +131,9 @@ class _FakeWeatherRepository implements WeatherRepository {
       false;
 }
 
-class _FakeSoilRepository implements SoilPropertiesRepository {
+class _SoilRepo implements SoilPropertiesRepository {
+  int calls = 0;
+
   @override
   Future<void> clearCache() async {}
 
@@ -129,8 +142,16 @@ class _FakeSoilRepository implements SoilPropertiesRepository {
     required double latitude,
     required double longitude,
     bool forceRefresh = false,
-  }) {
-    throw UnimplementedError();
+  }) async {
+    calls++;
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+    return Right(
+      SoilPropertiesEntity(
+        latitude: latitude,
+        longitude: longitude,
+        layers: const [],
+      ),
+    );
   }
 
   @override
@@ -176,15 +197,26 @@ class _FakeSoilRepository implements SoilPropertiesRepository {
       false;
 }
 
-class _FakeLocationService implements LocationService {
+class _Network implements NetworkInfo {
+  @override
+  Future<bool> get isConnected async => true;
+
+  @override
+  Stream<bool> get onConnectivityChanged => const Stream<bool>.empty();
+
+  @override
+  Future<NetworkType> get networkType async => NetworkType.wifi;
+}
+
+class _Location implements LocationService {
   @override
   Future<bool> checkPermission() async => true;
 
   @override
   Future<LocationData> getCurrentLocation() async {
     return LocationData(
-      latitude: 41.2995,
-      longitude: 69.2401,
+      latitude: 41.3,
+      longitude: 69.2,
       timestamp: DateTime.now(),
     );
   }
@@ -202,38 +234,34 @@ class _FakeLocationService implements LocationService {
   Future<bool> requestPermission() async => true;
 }
 
-class _FakeNetworkInfo implements NetworkInfo {
-  @override
-  Future<bool> get isConnected async => true;
-
-  @override
-  Stream<bool> get onConnectivityChanged => const Stream<bool>.empty();
-
-  @override
-  Future<NetworkType> get networkType async => NetworkType.wifi;
-}
-
 void main() {
-  testWidgets('Settings page updates theme and locale', (tester) async {
-    final repository = _TestSettingsRepository();
-    final cubit = AppSettingsCubit(repository: repository);
-    await cubit.initialize();
+  testWidgets('Settings renders storage and executes sync/cleanup actions', (
+    tester,
+  ) async {
+    final repo = _Repo();
+    final appCubit = AppSettingsCubit(repository: repo);
+    await appCubit.initialize();
 
-    final tempDir = await Directory.systemTemp.createTemp(
-      'settings_widget_test',
-    );
+    final weatherRepo = _WeatherRepo();
+    final soilRepo = _SoilRepo();
+
+    final tempDir = await Directory.systemTemp.createTemp('settings_sync_test');
     Hive.init(tempDir.path);
-    final weather = await Hive.openBox('w');
-    final soilM = await Hive.openBox('s1');
-    final soilP = await Hive.openBox('s2');
+    final weather = await Hive.openBox('weather_cache');
+    final soilM = await Hive.openBox('soil_moisture_cache');
+    final soilP = await Hive.openBox('soil_properties_cache');
 
-    final settingsBloc = SettingsBloc(
-      appSettingsCubit: cubit,
-      appSettingsRepository: repository,
-      weatherRepository: _FakeWeatherRepository(),
-      soilPropertiesRepository: _FakeSoilRepository(),
-      locationService: _FakeLocationService(),
-      networkInfo: _FakeNetworkInfo(),
+    await weather.put('k1', 'value1');
+    await soilM.put('k2', 'value2');
+    await soilP.put('k3', 'value3');
+
+    final bloc = SettingsBloc(
+      appSettingsCubit: appCubit,
+      appSettingsRepository: repo,
+      weatherRepository: weatherRepo,
+      soilPropertiesRepository: soilRepo,
+      locationService: _Location(),
+      networkInfo: _Network(),
       storageStatsService: StorageStatsService(
         weatherBox: weather,
         soilMoistureBox: soilM,
@@ -243,8 +271,8 @@ void main() {
           () async => PackageInfo(
             appName: 'AgroSense',
             packageName: 'agro_sense',
-            version: '1.0.0',
-            buildNumber: '1',
+            version: '1.2.3',
+            buildNumber: '7',
           ),
     )..add(const SettingsStarted());
 
@@ -260,8 +288,8 @@ void main() {
         ],
         home: MultiBlocProvider(
           providers: [
-            BlocProvider.value(value: cubit),
-            BlocProvider.value(value: settingsBloc),
+            BlocProvider.value(value: appCubit),
+            BlocProvider.value(value: bloc),
           ],
           child: const SettingsView(),
         ),
@@ -270,18 +298,25 @@ void main() {
 
     await tester.pump(const Duration(milliseconds: 500));
 
-    expect(find.text('Language & Region'), findsOneWidget);
-    expect(find.byType(SvgPicture), findsNWidgets(3));
+    expect(find.text('Offline Data Manager'), findsOneWidget);
+    expect(find.text('Version 1.2.3 (Build 7)'), findsOneWidget);
+    expect(find.text('3 entries'), findsOneWidget);
 
-    await tester.tap(find.byType(Switch).at(1));
+    await tester.tap(find.text('Sync Now'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 120));
     await tester.pump(const Duration(milliseconds: 300));
-    expect(cubit.state.themeMode, ThemeMode.dark);
 
-    await tester.tap(find.text('Russian'));
+    expect(weatherRepo.weatherCalls, greaterThan(0));
+    expect(weatherRepo.soilCalls, greaterThan(0));
+    expect(soilRepo.calls, greaterThan(0));
+    expect(repo.lastSync, isNotNull);
+
+    await tester.tap(find.text('Clean Up'));
     await tester.pump(const Duration(milliseconds: 300));
-    expect(cubit.state.locale.languageCode, 'ru');
+    expect(find.text('0 entries'), findsOneWidget);
 
-    await settingsBloc.close();
+    await bloc.close();
     await weather.close();
     await soilM.close();
     await soilP.close();

@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class _FakeAppSettingsRepository implements AppSettingsRepository {
-  ThemeMode storedTheme = ThemeMode.system;
+  ThemeMode storedTheme = ThemeMode.light;
   Locale storedLocale = const Locale('uz');
+  bool notificationsEnabled = true;
+  bool autoSyncOnWifi = true;
+  DateTime? lastManualSyncAt;
 
   @override
   Future<Locale> getLocale() async => storedLocale;
@@ -21,6 +24,30 @@ class _FakeAppSettingsRepository implements AppSettingsRepository {
   @override
   Future<void> setThemeMode(ThemeMode mode) async {
     storedTheme = mode;
+  }
+
+  @override
+  Future<bool> getNotificationsEnabled() async => notificationsEnabled;
+
+  @override
+  Future<void> setNotificationsEnabled(bool value) async {
+    notificationsEnabled = value;
+  }
+
+  @override
+  Future<bool> getAutoSyncOnWifi() async => autoSyncOnWifi;
+
+  @override
+  Future<void> setAutoSyncOnWifi(bool value) async {
+    autoSyncOnWifi = value;
+  }
+
+  @override
+  Future<DateTime?> getLastManualSyncAt() async => lastManualSyncAt;
+
+  @override
+  Future<void> setLastManualSyncAt(DateTime value) async {
+    lastManualSyncAt = value;
   }
 }
 

@@ -7,7 +7,40 @@
   "routerNotFoundTitle": "Page not found",
   "routerBackHome": "Back to dashboard",
   "settingsTitle": "Settings",
+  "appPreferences": "App Preferences",
   "settingsSubtitle": "Manage Preferences",
+  "languageAndRegion": "Language & Region",
+  "offlineDataManager": "Offline Data Manager",
+  "localStorage": "Local Storage",
+  "manageOfflineMaps": "Manage your offline maps",
+  "cleanUp": "Clean Up",
+  "usedStorage": "{value} Used",
+  "@usedStorage": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "availableStorage": "{value} Available",
+  "@availableStorage": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "autoSyncWifi": "Auto-Sync on Wi-Fi",
+  "syncNow": "Sync Now",
+  "darkMode": "Dark Mode",
+  "versionBuild": "Version {version} (Build {build})",
+  "@versionBuild": {
+    "placeholders": {
+      "version": {},
+      "build": {}
+    }
+  },
+  "syncFailedOffline": "No internet connection. Sync failed.",
+  "syncFailedGeneric": "Sync failed. Please try again.",
+  "syncPartialFailure": "Some data failed to sync.",
+  "notificationsOn": "On",
+  "notificationsOff": "Off",
   "appearance": "Appearance",
   "general": "General",
   "appTheme": "App Theme",

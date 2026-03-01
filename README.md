@@ -145,6 +145,12 @@ Bu loyiha **Toshkent Axborot Texnologiyalari Universiteti** (TATU) Dasturiy inji
 - **freezed**: Immutable models
 - **json_serializable**: JSON serialization
 - **build_runner**: Code generation
+- **flutter_gen_runner**: Type-safe `Assets.*` API for image/svg assets
+
+### Asset Generation Workflow
+- Add new files under `assets/icons/` or `assets/images/`.
+- Run `flutter pub run build_runner build --delete-conflicting-outputs`.
+- Use generated paths from `lib/gen/assets.gen.dart` (e.g. `Assets.icons.icUz.svg()`).
 
 ### Additional
 - **Localization**: flutter_localizations + intl

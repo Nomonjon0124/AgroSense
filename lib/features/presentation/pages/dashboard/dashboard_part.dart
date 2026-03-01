@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 import '../../../../core/di/injection_container.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../bloc/dashboard/dashboard_bloc.dart';
 import '../../bloc/dashboard/dashboard_event.dart';
 import '../../bloc/dashboard/dashboard_state.dart';

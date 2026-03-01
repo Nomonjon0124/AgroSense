@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../core/di/injection_container.dart';
+import '../../features/presentation/bloc/settings/settings_bloc.dart';
 import '../../features/presentation/pages/dashboard/dashboard_part.dart';
 import '../../features/presentation/pages/main_shell_page.dart';
 import '../../features/presentation/pages/alerts/alerts_page.dart';
@@ -69,8 +72,13 @@ class AppRouter {
             path: AppRoutes.settings,
             name: 'settings',
             pageBuilder:
-                (context, state) =>
-                    const NoTransitionPage(child: SettingsPage()),
+                (context, state) => NoTransitionPage(
+                  child: BlocProvider(
+                    create:
+                        (_) => sl<SettingsBloc>()..add(const SettingsStarted()),
+                    child: const SettingsPage(),
+                  ),
+                ),
           ),
         ],
       ),

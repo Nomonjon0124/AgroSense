@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/extensions/text_extensions.dart';
 import '../../../../../core/utils/weather_code_helper.dart';
 import '../../../../weather/domain/entities/weather_entity.dart';

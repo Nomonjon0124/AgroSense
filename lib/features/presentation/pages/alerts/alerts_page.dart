@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -25,8 +25,9 @@ class _AlertsPageState extends State<AlertsPage> {
     final filtered =
         alerts.where((alert) {
           if (filter == AlertFilter.all) return true;
-          if (filter == AlertFilter.critical)
+          if (filter == AlertFilter.critical) {
             return alert.type == AlertCardType.critical;
+          }
           return alert.type == AlertCardType.warning;
         }).toList();
 

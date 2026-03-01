@@ -7,7 +7,40 @@
   "routerNotFoundTitle": "Sahifa topilmadi",
   "routerBackHome": "Bosh sahifaga qaytish",
   "settingsTitle": "Sozlamalar",
+  "appPreferences": "Ilova sozlamalari",
   "settingsSubtitle": "Sozlamalarni boshqarish",
+  "languageAndRegion": "Til va hudud",
+  "offlineDataManager": "Oflayn ma'lumot boshqaruvi",
+  "localStorage": "Lokal xotira",
+  "manageOfflineMaps": "Oflayn xaritalarni boshqaring",
+  "cleanUp": "Tozalash",
+  "usedStorage": "{value} ishlatilgan",
+  "@usedStorage": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "availableStorage": "{value} mavjud",
+  "@availableStorage": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "autoSyncWifi": "Wi‑Fi orqali avto-sinxron",
+  "syncNow": "Hozir sinxronlash",
+  "darkMode": "Qorong'i rejim",
+  "versionBuild": "Versiya {version} (Build {build})",
+  "@versionBuild": {
+    "placeholders": {
+      "version": {},
+      "build": {}
+    }
+  },
+  "syncFailedOffline": "Internet yo'q. Sinxronizatsiya amalga oshmadi.",
+  "syncFailedGeneric": "Sinxronizatsiya bajarilmadi. Qayta urinib ko'ring.",
+  "syncPartialFailure": "Ba'zi ma'lumotlar sinxronlanmadi.",
+  "notificationsOn": "Yoqiq",
+  "notificationsOff": "O'chiq",
   "appearance": "Ko'rinish",
   "general": "Umumiy",
   "appTheme": "Ilova mavzusi",
