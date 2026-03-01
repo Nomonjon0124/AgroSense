@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/extensions/text_extensions.dart';
@@ -21,21 +22,19 @@ class _ForecastSectionState extends State<ForecastSection> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       children: [
-        /// Header
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            '7-Day Forecast'.s(18).w(700).c(AppColors.textPrimary),
+            l10n.forecastTitle.s(18).w(700).c(AppColors.textPrimary),
             TextButton(
-              onPressed: () {
-                // TODO: Barcha prognozlarni ko'rsatish
-              },
+              onPressed: () {},
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  'See All'.s(14).w(500).c(AppColors.primary),
+                  l10n.seeAll.s(14).w(500).c(AppColors.primary),
                   const Gap(4),
                   const Icon(
                     Icons.chevron_right,
@@ -47,10 +46,7 @@ class _ForecastSectionState extends State<ForecastSection> {
             ),
           ],
         ),
-
         const Gap(12),
-
-        /// Prognoz kunlari
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           physics: const BouncingScrollPhysics(),
@@ -83,7 +79,6 @@ class _ForecastSectionState extends State<ForecastSection> {
   }
 }
 
-/// Prognoz kun kartasi
 class _ForecastDayCard extends StatelessWidget {
   final String day;
   final int temperature;
@@ -109,10 +104,9 @@ class _ForecastDayCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primarySurface : AppColors.surface,
           borderRadius: BorderRadius.circular(16),
-          border:
-              isSelected
-                  ? Border.all(color: AppColors.primaryLight, width: 1.5)
-                  : Border.all(color: AppColors.border),
+          border: isSelected
+              ? Border.all(color: AppColors.primaryLight, width: 1.5)
+              : Border.all(color: AppColors.border),
           boxShadow: [
             BoxShadow(
               color: AppColors.shadow,
@@ -144,8 +138,7 @@ class _ForecastDayCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color:
-                    isSelected ? AppColors.primaryDark : AppColors.textPrimary,
+                color: isSelected ? AppColors.primaryDark : AppColors.textPrimary,
               ),
             ),
           ],
@@ -154,3 +147,4 @@ class _ForecastDayCard extends StatelessWidget {
     );
   }
 }
+

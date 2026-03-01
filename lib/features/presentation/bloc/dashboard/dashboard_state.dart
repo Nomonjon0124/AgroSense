@@ -85,13 +85,13 @@ class DashboardData extends Equatable {
   String get greeting {
     final hour = DateTime.now().hour;
     if (hour >= 5 && hour < 12) {
-      return 'Good Morning';
+      return 'greeting.morning';
     } else if (hour >= 12 && hour < 17) {
-      return 'Good Afternoon';
+      return 'greeting.afternoon';
     } else if (hour >= 17 && hour < 21) {
-      return 'Good Evening';
+      return 'greeting.evening';
     } else {
-      return 'Good Night';
+      return 'greeting.night';
     }
   }
 
@@ -101,11 +101,11 @@ class DashboardData extends Equatable {
     final difference = now.difference(lastUpdated);
 
     if (difference.inMinutes < 1) {
-      return 'Just now';
+      return '0m';
     } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes}m ago';
+      return '${difference.inMinutes}m';
     } else if (difference.inHours < 24) {
-      return '${difference.inHours}h ago';
+      return '${difference.inHours}h';
     } else {
       final hour = lastUpdated.hour.toString().padLeft(2, '0');
       final minute = lastUpdated.minute.toString().padLeft(2, '0');

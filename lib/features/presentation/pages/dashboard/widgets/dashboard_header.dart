@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_styles.dart';
@@ -23,6 +24,24 @@ class DashboardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    String localizedGreeting;
+    switch (greeting) {
+      case 'greeting.morning':
+        localizedGreeting = l10n.greetingMorning;
+        break;
+      case 'greeting.afternoon':
+        localizedGreeting = l10n.greetingAfternoon;
+        break;
+      case 'greeting.evening':
+        localizedGreeting = l10n.greetingEvening;
+        break;
+      case 'greeting.night':
+        localizedGreeting = l10n.greetingNight;
+        break;
+      default:
+        localizedGreeting = greeting;
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,7 +51,7 @@ class DashboardHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              greeting.s(24).w(700).c(AppColors.textPrimary),
+              localizedGreeting.s(24).w(700).c(AppColors.textPrimary),
               const Gap(4),
               Row(
                 children: [
@@ -59,12 +78,13 @@ class DashboardHeader extends StatelessWidget {
         const Gap(8),
 
         /// Offline status badge
-        _buildStatusBadge(),
+        _buildStatusBadge(context),
       ],
     );
   }
 
-  Widget _buildStatusBadge() {
+  Widget _buildStatusBadge(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
@@ -95,11 +115,11 @@ class DashboardHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              (isOffline ? 'OFFLINE' : 'ONLINE')
+              (isOffline ? l10n.offline : l10n.online)
                   .s(10)
                   .w(700)
                   .c(AppColors.textSecondary),
-              'Last Synced $lastSyncTime'.s(9).c(AppColors.textTertiary),
+              l10n.lastSyncedAt(lastSyncTime).s(9).c(AppColors.textTertiary),
             ],
           ),
         ],

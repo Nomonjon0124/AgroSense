@@ -8,6 +8,18 @@ class ErrorOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    String localizedMessage;
+    switch (message) {
+      case 'map.error.locationPermission':
+        localizedMessage = l10n.mapErrorLocationPermission;
+        break;
+      case 'map.error.locationServiceDisabled':
+        localizedMessage = l10n.mapErrorLocationServiceDisabled;
+        break;
+      default:
+        localizedMessage = message;
+    }
     return Container(
       color: Colors.black.withAlpha(100),
       child: SafeArea(
@@ -36,10 +48,10 @@ class ErrorOverlay extends StatelessWidget {
                   ),
                 ),
                 const Gap(16),
-                'Xatolik'.s(18).w(600).c(AppColors.textPrimary),
+                l10n.mapErrorTitle.s(18).w(600).c(AppColors.textPrimary),
                 const Gap(8),
                 Text(
-                  message,
+                  localizedMessage,
                   style: const TextStyle(
                     fontSize: 14,
                     color: AppColors.textSecondary,
@@ -60,7 +72,7 @@ class ErrorOverlay extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text('Qayta urinish'),
+                  child: Text(l10n.retry),
                 ),
               ],
             ),

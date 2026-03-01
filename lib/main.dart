@@ -1,83 +1,109 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'config/router/app_router.dart';
 import 'core/di/injection_container.dart';
+import 'core/settings/app_settings_cubit.dart';
+import 'core/settings/app_settings_state.dart';
 
-/// Ilova ishga tushish nuqtasi
 Future<void> main() async {
-  // Flutter binding ni ishga tushirish
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Ekran orientatsiyasini belgilash (faqat portret)
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
-  // Status bar va navigation bar ranglarini sozlash
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: Colors.white,
-      systemNavigationBarIconBrightness: Brightness.dark,
+  await InjectionContainer.init();
+  await sl<AppSettingsCubit>().initialize();
+
+  runApp(
+    BlocProvider.value(
+      value: sl<AppSettingsCubit>(),
+      child: const AgroSenseApp(),
     ),
   );
-
-  // Dependency Injection ni ishga tushirish
-  await InjectionContainer.init();
-
-  runApp(const AgroSenseApp());
 }
 
-/// AgroSense ilovasi
 class AgroSenseApp extends StatelessWidget {
   const AgroSenseApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'AgroSense',
-      debugShowCheckedModeBanner: false,
-
-      /// GoRouter konfiguratsiyasi
-      routerConfig: AppRouter.router,
-
-      /// Light Theme
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
+    return BlocBuilder<AppSettingsCubit, AppSettingsState>(
+      builder: (context, settings) {
+        final lightColorScheme = ColorScheme.fromSeed(
           seedColor: const Color(0xFF2E7D32),
           brightness: Brightness.light,
-        ),
-        fontFamily: 'Roboto',
-        scaffoldBackgroundColor: const Color(0xFFF5F5F5),
-        appBarTheme: const AppBarTheme(
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          foregroundColor: Color(0xFF1A1A1A),
-        ),
-        cardTheme: CardTheme(
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-      ),
-
-      /// Dark Theme
-      darkTheme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF4CAF50),
+        );
+        final darkColorScheme = ColorScheme.fromSeed(
+          seedColor: const Color(0xFF2E7D32),
           brightness: Brightness.dark,
-        ),
-        fontFamily: 'Roboto',
-        appBarTheme: const AppBarTheme(centerTitle: true, elevation: 0),
-      ),
-      themeMode: ThemeMode.light,
+        );
+
+        return MaterialApp.router(
+          title: 'AgroSense',
+          debugShowCheckedModeBanner: false,
+          routerConfig: AppRouter.router,
+          locale: settings.locale,
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          localeResolutionCallback: (locale, supportedLocales) {
+            if (locale == null) return const Locale('uz');
+            for (final supported in supportedLocales) {
+              if (supported.languageCode == locale.languageCode) {
+                return supported;
+              }
+            }
+            return const Locale('uz');
+          },
+          theme: ThemeData(
+            useMaterial3: true,
+            colorScheme: lightColorScheme,
+            fontFamily: 'Roboto',
+            scaffoldBackgroundColor: const Color(0xFFF2F5F3),
+            appBarTheme: AppBarTheme(
+              centerTitle: true,
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              foregroundColor: lightColorScheme.onSurface,
+            ),
+            cardTheme: CardThemeData(
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+          ),
+          darkTheme: ThemeData(
+            useMaterial3: true,
+            colorScheme: darkColorScheme,
+            fontFamily: 'Roboto',
+            scaffoldBackgroundColor: const Color(0xFF0F1512),
+            appBarTheme: AppBarTheme(
+              centerTitle: true,
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              foregroundColor: darkColorScheme.onSurface,
+            ),
+            cardTheme: CardThemeData(
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+            ),
+          ),
+          themeMode: settings.themeMode,
+        );
+      },
     );
   }
 }

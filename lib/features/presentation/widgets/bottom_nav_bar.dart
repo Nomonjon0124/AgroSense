@@ -1,55 +1,60 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../config/router/app_router.dart';
 
-/// Bottom Navigation Bar widgeti
-/// Dizaynga mos ravishda yaratilgan
 class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface.withValues(alpha: 0.92),
+        border: Border(
+          top: BorderSide(
+            color: colorScheme.outlineVariant.withValues(alpha: 0.45),
+            width: 1,
+          ),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(13),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 20,
+            offset: const Offset(0, -4),
           ),
         ],
       ),
       child: SafeArea(
+        top: false,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          padding: const EdgeInsets.fromLTRB(24, 10, 24, 16),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _NavBarItem(
-                icon: Icons.dashboard_outlined,
-                activeIcon: Icons.dashboard,
-                label: 'Dashboard',
+                icon: Icons.grid_view_rounded,
+                label: l10n.navDashboard,
                 route: AppRoutes.dashboard,
               ),
               _NavBarItem(
                 icon: Icons.map_outlined,
-                activeIcon: Icons.map,
-                label: 'Map',
+                label: l10n.navMap,
                 route: AppRoutes.map,
               ),
               _NavBarItem(
-                icon: Icons.notifications_outlined,
-                activeIcon: Icons.notifications,
-                label: 'Alerts',
+                icon: Icons.notifications_none_rounded,
+                label: l10n.navAlerts,
                 route: AppRoutes.alerts,
-                badgeCount: 3, // TODO: Bu qiymat dinamik bo'lishi kerak
+                badgeCount: 1,
               ),
               _NavBarItem(
                 icon: Icons.settings_outlined,
-                activeIcon: Icons.settings,
-                label: 'Settings',
+                label: l10n.navSettings,
                 route: AppRoutes.settings,
               ),
             ],
@@ -60,17 +65,14 @@ class BottomNavBar extends StatelessWidget {
   }
 }
 
-/// Navigatsiya elementi
 class _NavBarItem extends StatelessWidget {
   final IconData icon;
-  final IconData activeIcon;
   final String label;
   final String route;
   final int? badgeCount;
 
   const _NavBarItem({
     required this.icon,
-    required this.activeIcon,
     required this.label,
     required this.route,
     this.badgeCount,
@@ -80,23 +82,15 @@ class _NavBarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentLocation = GoRouterState.of(context).uri.path;
     final isActive = currentLocation == route;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return InkWell(
       onTap: () {
-        if (!isActive) {
-          context.go(route);
-        }
+        if (!isActive) context.go(route);
       },
       borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color:
-              isActive
-                  ? const Color(0xFF1B5E20).withAlpha(26)
-                  : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-        ),
+      child: SizedBox(
+        width: 64,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -104,34 +98,40 @@ class _NavBarItem extends StatelessWidget {
               clipBehavior: Clip.none,
               children: [
                 Icon(
-                  isActive ? activeIcon : icon,
-                  color:
-                      isActive ? const Color(0xFF1B5E20) : Colors.grey.shade600,
+                  icon,
                   size: 24,
+                  color: isActive ? colorScheme.primary : colorScheme.onSurfaceVariant,
                 ),
-                // Badge (ogohlantirish soni uchun)
                 if (badgeCount != null && badgeCount! > 0)
                   Positioned(
-                    right: -8,
+                    right: -2,
+                    top: -2,
+                    child: Container(
+                      width: 10,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: Colors.red.shade600,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: colorScheme.surface, width: 1.5),
+                      ),
+                    ),
+                  ),
+                if (isActive)
+                  Positioned(
+                    right: -4,
                     top: -4,
                     child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFE53935),
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        color: colorScheme.primary,
                         shape: BoxShape.circle,
-                      ),
-                      constraints: const BoxConstraints(
-                        minWidth: 16,
-                        minHeight: 16,
-                      ),
-                      child: Text(
-                        badgeCount! > 9 ? '9+' : badgeCount.toString(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
+                        boxShadow: [
+                          BoxShadow(
+                            color: colorScheme.surface,
+                            spreadRadius: 2,
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -140,11 +140,12 @@ class _NavBarItem extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontSize: 12,
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
-                color:
-                    isActive ? const Color(0xFF1B5E20) : Colors.grey.shade600,
+                fontSize: 10,
+                fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
+                color: isActive ? colorScheme.primary : colorScheme.onSurfaceVariant,
               ),
             ),
           ],
@@ -153,3 +154,5 @@ class _NavBarItem extends StatelessWidget {
     );
   }
 }
+
+

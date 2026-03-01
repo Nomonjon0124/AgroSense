@@ -1,4 +1,4 @@
-part of '../map_part.dart';
+﻿part of '../map_part.dart';
 
 class FieldInfoSheet extends StatelessWidget {
   final FieldEntity field;
@@ -13,6 +13,7 @@ class FieldInfoSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -30,7 +31,6 @@ class FieldInfoSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// Header
           Row(
             children: [
               Expanded(
@@ -64,13 +64,10 @@ class FieldInfoSheet extends StatelessWidget {
               ),
             ],
           ),
-
           const Gap(4),
-
-          /// Subtitle
           Row(
             children: [
-              '${field.areaHectares} Hectares'.s(14).c(AppColors.textSecondary),
+              l10n.hectares(field.areaHectares.toString()).s(14).c(AppColors.textSecondary),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 8),
                 width: 4,
@@ -83,38 +80,32 @@ class FieldInfoSheet extends StatelessWidget {
               field.currentStage.s(14).c(AppColors.textSecondary),
             ],
           ),
-
           const Gap(20),
-
-          /// Stats Row
           Row(
             children: [
               StatCard(
                 icon: Icons.water_drop_outlined,
-                label: 'MOISTURE',
+                label: l10n.metricMoisture,
                 value: '${field.moisture}%',
                 color: _getMoistureColor(field.moisture),
               ),
               const Gap(12),
               StatCard(
                 icon: Icons.thermostat_outlined,
-                label: 'SOIL T',
+                label: l10n.metricSoilT,
                 value: '${field.soilTemperature.round()}°C',
                 color: AppColors.textPrimary,
               ),
               const Gap(12),
               StatCard(
                 icon: Icons.healing_outlined,
-                label: 'HEALTH',
+                label: l10n.metricHealth,
                 value: '${field.healthPercentage}%',
                 color: _getHealthColor(field.healthPercentage),
               ),
             ],
           ),
-
           const Gap(20),
-
-          /// View Full Analysis Button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -130,7 +121,7 @@ class FieldInfoSheet extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  'View Full Analysis'.s(14).w(600).c(Colors.white),
+                  l10n.viewFullAnalysis.s(14).w(600).c(Colors.white),
                   const Gap(8),
                   const Icon(Icons.arrow_forward, size: 18),
                 ],
@@ -154,3 +145,4 @@ class FieldInfoSheet extends StatelessWidget {
     return AppColors.success;
   }
 }
+

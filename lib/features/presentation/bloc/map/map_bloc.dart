@@ -47,10 +47,10 @@ class MapBloc extends Bloc<MapEvent, MapState> {
   Future<void> _onLoadMap(LoadMap event, Emitter<MapState> emit) async {
     // 1. Darhol xarita ko'rsatish + Loading overlay (0%)
     emit(
-      MapDataLoading(
+        MapDataLoading(
         mapCenter: _lastKnownCenter,
         progress: 0,
-        loadingMessage: 'Xarita tayyorlanmoqda...',
+        loadingMessage: 'map.loading.preparing',
       ),
     );
 
@@ -61,7 +61,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         MapDataLoading(
           mapCenter: _lastKnownCenter,
           progress: 10,
-          loadingMessage: 'Tarmoq tekshirilmoqda...',
+          loadingMessage: 'map.loading.checkingNetwork',
         ),
       );
 
@@ -72,7 +72,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         MapDataLoading(
           mapCenter: _lastKnownCenter,
           progress: 30,
-          loadingMessage: 'Joylashuv aniqlanmoqda...',
+          loadingMessage: 'map.loading.determiningLocation',
         ),
       );
 
@@ -84,7 +84,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         MapDataLoading(
           mapCenter: _lastKnownCenter,
           progress: 50,
-          loadingMessage: 'Xarita yuklanmoqda...',
+          loadingMessage: 'map.loading.loadingMap',
         ),
       );
 
@@ -95,7 +95,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         MapDataLoading(
           mapCenter: _lastKnownCenter,
           progress: 70,
-          loadingMessage: 'Dala ma\'lumotlari yuklanmoqda...',
+          loadingMessage: 'map.loading.loadingFields',
         ),
       );
 
@@ -108,7 +108,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         MapDataLoading(
           mapCenter: _lastKnownCenter,
           progress: 90,
-          loadingMessage: 'Ob-havo ma\'lumotlari yuklanmoqda...',
+          loadingMessage: 'map.loading.loadingWeather',
         ),
       );
 
@@ -119,7 +119,7 @@ class MapBloc extends Bloc<MapEvent, MapState> {
         MapDataLoading(
           mapCenter: _lastKnownCenter,
           progress: 100,
-          loadingMessage: 'Tayyor!',
+          loadingMessage: 'map.loading.ready',
         ),
       );
 
@@ -140,15 +140,14 @@ class MapBloc extends Bloc<MapEvent, MapState> {
     } on LocationPermissionDeniedException {
       emit(
         MapError(
-          message:
-              'Joylashuv ruxsati kerak. Iltimos, sozlamalardan ruxsat bering.',
+          message: 'map.error.locationPermission',
           mapCenter: _lastKnownCenter,
         ),
       );
     } on LocationServiceDisabledException {
       emit(
         MapError(
-          message: 'GPS xizmati o\'chirilgan. Iltimos, GPS ni yoqing.',
+          message: 'map.error.locationServiceDisabled',
           mapCenter: _lastKnownCenter,
         ),
       );

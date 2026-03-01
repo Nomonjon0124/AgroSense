@@ -98,18 +98,18 @@ class MapData extends Equatable {
 
   /// Kesh vaqti formatlangan
   String get cachedTimeAgo {
-    if (lastCachedTime == null) return 'Never';
+    if (lastCachedTime == null) return '--';
 
     final difference = DateTime.now().difference(lastCachedTime!);
 
     if (difference.inMinutes < 1) {
-      return 'Just now';
+      return '0m';
     } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes}m ago';
+      return '${difference.inMinutes}m';
     } else if (difference.inHours < 24) {
-      return '${difference.inHours}h ago';
+      return '${difference.inHours}h';
     } else {
-      return '${difference.inDays}d ago';
+      return '${difference.inDays}d';
     }
   }
 

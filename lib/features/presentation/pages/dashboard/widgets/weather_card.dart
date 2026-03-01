@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../../../core/extensions/text_extensions.dart';
 import '../../../../../core/utils/weather_code_helper.dart';
 
-/// Joriy ob-havo kartasi
-/// Figma dizayniga mos yashil gradient karta
 class WeatherCard extends StatelessWidget {
   final int temperature;
   final int weatherCode;
@@ -30,6 +29,7 @@ class WeatherCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final condition = WeatherCodeHelper.getShortCondition(weatherCode);
 
     return Container(
@@ -56,20 +56,17 @@ class WeatherCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// Header - Current Weather va Live Data badge
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  'Current Weather'.s(14).w(500).c(Colors.white70),
+                  l10n.currentWeather.s(14).w(500).c(Colors.white70),
                   const Gap(8),
-                  if (isLiveData) _buildLiveBadge(),
+                  if (isLiveData) _buildLiveBadge(context),
                 ],
               ),
-
-              /// Ob-havo ikonkasi
               Icon(
                 WeatherCodeHelper.getIcon(weatherCode, isDay: isDay),
                 size: 56,
@@ -77,10 +74,7 @@ class WeatherCard extends StatelessWidget {
               ),
             ],
           ),
-
           const Gap(16),
-
-          /// Harorat va holat
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -92,28 +86,25 @@ class WeatherCard extends StatelessWidget {
               ),
             ],
           ),
-
           const Gap(24),
-
-          /// Qo'shimcha ma'lumotlar
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               _buildInfoItem(
                 icon: Icons.water_drop_outlined,
-                label: 'HUMIDITY',
+                label: l10n.humidityUpper,
                 value: '$humidity%',
               ),
               const Gap(32),
               _buildInfoItem(
                 icon: Icons.air,
-                label: 'WIND',
+                label: l10n.windUpper,
                 value: '$windSpeed km/h',
               ),
               const Gap(32),
               _buildInfoItem(
                 icon: Icons.umbrella_outlined,
-                label: 'PRECIP',
+                label: l10n.precipUpper,
                 value: '$precipitation mm',
               ),
             ],
@@ -123,7 +114,8 @@ class WeatherCard extends StatelessWidget {
     );
   }
 
-  Widget _buildLiveBadge() {
+  Widget _buildLiveBadge(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
@@ -135,7 +127,7 @@ class WeatherCard extends StatelessWidget {
         children: [
           const Icon(Icons.circle, size: 6, color: Colors.white),
           const Gap(6),
-          'Live Data'.s(11).w(600).c(Colors.white),
+          l10n.liveData.s(11).w(600).c(Colors.white),
         ],
       ),
     );
@@ -162,3 +154,4 @@ class WeatherCard extends StatelessWidget {
     );
   }
 }
+

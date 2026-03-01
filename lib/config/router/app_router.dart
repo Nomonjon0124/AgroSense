@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../features/presentation/pages/dashboard/dashboard_part.dart';
 import '../../features/presentation/pages/main_shell_page.dart';
@@ -84,7 +85,7 @@ class AppRouter {
                   const Icon(Icons.error_outline, size: 64, color: Colors.red),
                   const SizedBox(height: 16),
                   Text(
-                    'Sahifa topilmadi',
+                    AppLocalizations.of(context)!.routerNotFoundTitle,
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 8),
@@ -95,7 +96,7 @@ class AppRouter {
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: () => context.go(AppRoutes.dashboard),
-                    child: const Text('Bosh sahifaga qaytish'),
+                    child: Text(AppLocalizations.of(context)!.routerBackHome),
                   ),
                 ],
               ),

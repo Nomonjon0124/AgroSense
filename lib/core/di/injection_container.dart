@@ -2,6 +2,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 
+import '../settings/app_settings_cubit.dart';
+import '../settings/app_settings_repository.dart';
+import '../settings/hive_app_settings_repository.dart';
 import '../../features/presentation/bloc/dashboard/dashboard_bloc.dart';
 import '../../features/presentation/bloc/map/map_bloc.dart';
 import '../../features/weather/data/datasources/open_meteo_remote_datasource.dart';
@@ -36,6 +39,18 @@ class InjectionContainer {
 
     // ==================== HIVE BOXES ====================
     await _initHiveBoxes();
+
+    // ==================== APP SETTINGS ====================
+
+    sl.registerLazySingleton<AppSettingsRepository>(
+      () => HiveAppSettingsRepository(
+        settingsBox: sl<Box<dynamic>>(instanceName: 'appSettingsBox'),
+      ),
+    );
+
+    sl.registerLazySingleton<AppSettingsCubit>(
+      () => AppSettingsCubit(repository: sl<AppSettingsRepository>()),
+    );
 
     // ==================== DATA SOURCES ====================
 
@@ -99,11 +114,16 @@ class InjectionContainer {
     final weatherBox = await Hive.openBox('weather_cache');
     final soilMoistureBox = await Hive.openBox('soil_moisture_cache');
     final soilPropertiesBox = await Hive.openBox('soil_properties_cache');
+    final appSettingsBox = await Hive.openBox('app_settings');
 
     // Box'larni GetIt'ga ro'yxatdan o'tkazish
     sl.registerSingleton<Box<dynamic>>(weatherBox, instanceName: 'weatherBox');
     sl.registerSingleton<Box<dynamic>>(soilMoistureBox, instanceName: 'soilMoistureBox');
     sl.registerSingleton<Box<dynamic>>(soilPropertiesBox, instanceName: 'soilPropertiesBox');
+    sl.registerSingleton<Box<dynamic>>(
+      appSettingsBox,
+      instanceName: 'appSettingsBox',
+    );
   }
 
   /// Barcha Hive box'larini tozalash (test uchun)
@@ -111,10 +131,12 @@ class InjectionContainer {
     final weatherBox = sl<Box<dynamic>>(instanceName: 'weatherBox');
     final soilMoistureBox = sl<Box<dynamic>>(instanceName: 'soilMoistureBox');
     final soilPropertiesBox = sl<Box<dynamic>>(instanceName: 'soilPropertiesBox');
+    final appSettingsBox = sl<Box<dynamic>>(instanceName: 'appSettingsBox');
 
     await weatherBox.clear();
     await soilMoistureBox.clear();
     await soilPropertiesBox.clear();
+    await appSettingsBox.clear();
   }
 
   /// GetIt'ni tozalash (test uchun)

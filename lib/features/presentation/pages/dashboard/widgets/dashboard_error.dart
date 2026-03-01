@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_text_styles.dart';
 import '../../../../../core/extensions/text_extensions.dart';
 
-/// Dashboard xatolik widgeti
 class DashboardErrorWidget extends StatelessWidget {
   final String message;
   final VoidCallback? onRetry;
@@ -14,13 +14,13 @@ class DashboardErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            /// Error ikonkasi
             Container(
               width: 100,
               height: 100,
@@ -34,15 +34,9 @@ class DashboardErrorWidget extends StatelessWidget {
                 color: AppColors.error,
               ),
             ),
-
             const Gap(24),
-
-            /// Xato sarlavhasi
-            'Ma\'lumot yuklanmadi'.s(20).w(600).c(AppColors.textPrimary),
-
+            l10n.dashboardLoadFailed.s(20).w(600).c(AppColors.textPrimary),
             const Gap(12),
-
-            /// Xato xabari
             Text(
               message,
               style: AppTextStyles.bodyMedium.copyWith(
@@ -50,10 +44,7 @@ class DashboardErrorWidget extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-
             const Gap(32),
-
-            /// Qayta urinish tugmasi
             if (onRetry != null)
               ElevatedButton.icon(
                 onPressed: onRetry,
@@ -69,12 +60,9 @@ class DashboardErrorWidget extends StatelessWidget {
                   ),
                 ),
                 icon: const Icon(Icons.refresh),
-                label: 'Qayta urinish'.s(14).w(600).c(Colors.white),
+                label: l10n.retry.s(14).w(600).c(Colors.white),
               ),
-
             const Gap(16),
-
-            /// Maslahat
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -92,7 +80,7 @@ class DashboardErrorWidget extends StatelessWidget {
                   const Gap(12),
                   Expanded(
                     child: Text(
-                      'Internet aloqasini tekshiring yoki GPS xizmati yoqilganligini tekshiring.',
+                      l10n.dashboardTip,
                       style: AppTextStyles.bodySmall.copyWith(
                         color: AppColors.info,
                       ),
@@ -107,3 +95,4 @@ class DashboardErrorWidget extends StatelessWidget {
     );
   }
 }
+

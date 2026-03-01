@@ -1,69 +1,58 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/extensions/text_extensions.dart';
 
-/// Dala holati bo'limi
 class FieldStatusSection extends StatelessWidget {
   const FieldStatusSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Backend dan dala ma'lumotlarini olish
-    // Hozircha demo ma'lumotlar
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        'Field Status'.s(18).w(700).c(AppColors.textPrimary),
+        l10n.fieldStatusTitle.s(18).w(700).c(AppColors.textPrimary),
         const Gap(16),
-
-        /// Dala kartalari
         FieldStatusCard(
-          fieldName: 'Wheat Field A',
+          fieldName: l10n.fieldWheatA,
           icon: Icons.grass,
           iconBackgroundColor: const Color(0xFFFFF3E0),
           iconColor: const Color(0xFFFF9800),
-          statusText: 'Moisture: 22%',
+          statusText: l10n.statusMoisture22,
           statusType: FieldStatusType.warning,
-          actionLabel: 'Water',
-          onActionTap: () {
-            // TODO: Sug'orish amali
-          },
+          actionLabel: l10n.actionWater,
+          onActionTap: () {},
         ),
-
         const Gap(12),
-
         FieldStatusCard(
-          fieldName: 'Corn Field B',
+          fieldName: l10n.fieldCornB,
           icon: Icons.eco,
           iconBackgroundColor: const Color(0xFFE8F5E9),
           iconColor: const Color(0xFF4CAF50),
-          statusText: 'Moisture: 45%',
+          statusText: l10n.statusMoisture45,
           statusType: FieldStatusType.good,
-          actionLabel: 'Good',
+          actionLabel: l10n.actionGood,
         ),
-
         const Gap(12),
-
         FieldStatusCard(
-          fieldName: 'Soybean Plot',
+          fieldName: l10n.fieldSoybeanPlot,
           icon: Icons.spa,
           iconBackgroundColor: const Color(0xFFF5F5F5),
           iconColor: const Color(0xFF9E9E9E),
-          statusText: 'Ready in 2 days',
+          statusText: l10n.statusReadyIn2Days,
           statusType: FieldStatusType.waiting,
-          actionLabel: 'Wait',
+          actionLabel: l10n.actionWait,
         ),
       ],
     );
   }
 }
 
-/// Dala holati turlari
 enum FieldStatusType { good, warning, waiting }
 
-/// Dala holati kartasi
 class FieldStatusCard extends StatelessWidget {
   final String fieldName;
   final IconData icon;
@@ -103,7 +92,6 @@ class FieldStatusCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          /// Dala ikonkasi
           Container(
             width: 48,
             height: 48,
@@ -113,10 +101,7 @@ class FieldStatusCard extends StatelessWidget {
             ),
             child: Icon(icon, color: iconColor, size: 24),
           ),
-
           const Gap(16),
-
-          /// Dala nomi va holati
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,8 +125,6 @@ class FieldStatusCard extends StatelessWidget {
               ],
             ),
           ),
-
-          /// Action tugmasi
           GestureDetector(
             onTap: onActionTap,
             child: Container(
@@ -210,3 +193,4 @@ class FieldStatusCard extends StatelessWidget {
     }
   }
 }
+

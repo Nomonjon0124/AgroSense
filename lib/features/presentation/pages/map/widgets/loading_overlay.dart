@@ -8,6 +8,34 @@ class LoadingOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    String localizedMessage;
+    switch (message) {
+      case 'map.loading.preparing':
+        localizedMessage = l10n.mapLoadingPreparing;
+        break;
+      case 'map.loading.checkingNetwork':
+        localizedMessage = l10n.mapLoadingCheckingNetwork;
+        break;
+      case 'map.loading.determiningLocation':
+        localizedMessage = l10n.mapLoadingDeterminingLocation;
+        break;
+      case 'map.loading.loadingMap':
+        localizedMessage = l10n.mapLoadingLoadingMap;
+        break;
+      case 'map.loading.loadingFields':
+        localizedMessage = l10n.mapLoadingLoadingFields;
+        break;
+      case 'map.loading.loadingWeather':
+        localizedMessage = l10n.mapLoadingLoadingWeather;
+        break;
+      case 'map.loading.ready':
+        localizedMessage = l10n.mapLoadingReady;
+        break;
+      default:
+        localizedMessage = message;
+    }
+
     return Container(
       color: Colors.black.withAlpha(100),
       child: SafeArea(
@@ -46,7 +74,7 @@ class LoadingOverlay extends StatelessWidget {
 
                 /// Loading message
                 Text(
-                  message,
+                  localizedMessage,
                   style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.textSecondary),
                   textAlign: TextAlign.center,
                 ),
