@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -31,34 +31,39 @@ class BottomNavBar extends StatelessWidget {
       ),
       child: SafeArea(
         top: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 10, 24, 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _NavBarItem(
-                icon: Icons.grid_view_rounded,
-                label: l10n.navDashboard,
-                route: AppRoutes.dashboard,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final horizontal = constraints.maxWidth < 360 ? 12.0 : 24.0;
+            return Padding(
+              padding: EdgeInsets.fromLTRB(horizontal, 10, horizontal, 14),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _NavBarItem(
+                    icon: Icons.grid_view_rounded,
+                    label: l10n.navDashboard,
+                    route: AppRoutes.dashboard,
+                  ),
+                  _NavBarItem(
+                    icon: Icons.map_outlined,
+                    label: l10n.navMap,
+                    route: AppRoutes.map,
+                  ),
+                  _NavBarItem(
+                    icon: Icons.notifications_none_rounded,
+                    label: l10n.navAlerts,
+                    route: AppRoutes.alerts,
+                    badgeCount: 1,
+                  ),
+                  _NavBarItem(
+                    icon: Icons.settings_outlined,
+                    label: l10n.navSettings,
+                    route: AppRoutes.settings,
+                  ),
+                ],
               ),
-              _NavBarItem(
-                icon: Icons.map_outlined,
-                label: l10n.navMap,
-                route: AppRoutes.map,
-              ),
-              _NavBarItem(
-                icon: Icons.notifications_none_rounded,
-                label: l10n.navAlerts,
-                route: AppRoutes.alerts,
-                badgeCount: 1,
-              ),
-              _NavBarItem(
-                icon: Icons.settings_outlined,
-                label: l10n.navSettings,
-                route: AppRoutes.settings,
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
@@ -90,7 +95,7 @@ class _NavBarItem extends StatelessWidget {
       },
       borderRadius: BorderRadius.circular(12),
       child: SizedBox(
-        width: 64,
+        width: 62,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -100,7 +105,10 @@ class _NavBarItem extends StatelessWidget {
                 Icon(
                   icon,
                   size: 24,
-                  color: isActive ? colorScheme.primary : colorScheme.onSurfaceVariant,
+                  color:
+                      isActive
+                          ? colorScheme.primary
+                          : colorScheme.onSurfaceVariant,
                 ),
                 if (badgeCount != null && badgeCount! > 0)
                   Positioned(
@@ -112,7 +120,10 @@ class _NavBarItem extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.red.shade600,
                         shape: BoxShape.circle,
-                        border: Border.all(color: colorScheme.surface, width: 1.5),
+                        border: Border.all(
+                          color: colorScheme.surface,
+                          width: 1.5,
+                        ),
                       ),
                     ),
                   ),
@@ -142,10 +153,14 @@ class _NavBarItem extends StatelessWidget {
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 10,
+                fontSize: 9.5,
                 fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
-                color: isActive ? colorScheme.primary : colorScheme.onSurfaceVariant,
+                color:
+                    isActive
+                        ? colorScheme.primary
+                        : colorScheme.onSurfaceVariant,
               ),
             ),
           ],
@@ -154,5 +169,3 @@ class _NavBarItem extends StatelessWidget {
     );
   }
 }
-
-

@@ -44,10 +44,7 @@ void main() {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        home: BlocProvider.value(
-          value: cubit,
-          child: const SettingsPage(),
-        ),
+        home: BlocProvider.value(value: cubit, child: const SettingsPage()),
       ),
     );
 

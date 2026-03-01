@@ -20,11 +20,12 @@ class MapView extends StatefulWidget {
   State<MapView> createState() => _MapViewState();
 }
 
-class _MapViewState extends State<MapView> with MapMixin{
-
+class _MapViewState extends State<MapView> with MapMixin {
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       body: BlocConsumer<MapBloc, MapState>(
         listener: (context, state) {
           if (!_isMapReady) return;
@@ -125,4 +126,3 @@ class _MapViewState extends State<MapView> with MapMixin{
     );
   }
 }
-

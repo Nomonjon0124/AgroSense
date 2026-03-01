@@ -4,28 +4,33 @@ class ProgressDot extends StatelessWidget {
   final bool isActive;
   final bool isCompleted;
 
-  const ProgressDot({super.key, required this.isActive, required this.isCompleted});
+  const ProgressDot({
+    super.key,
+    required this.isActive,
+    required this.isCompleted,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       width: 12,
       height: 12,
       decoration: BoxDecoration(
         color:
-        isCompleted
-            ? AppColors.success
-            : (isActive ? AppColors.primary : AppColors.border),
+            isCompleted
+                ? AppColors.success
+                : (isActive ? colorScheme.primary : colorScheme.outlineVariant),
         shape: BoxShape.circle,
         border: Border.all(
-          color: isActive ? AppColors.primary : AppColors.border,
+          color: isActive ? colorScheme.primary : colorScheme.outlineVariant,
           width: 2,
         ),
       ),
       child:
-      isCompleted
-          ? const Icon(Icons.check, size: 8, color: Colors.white)
-          : null,
+          isCompleted
+              ? const Icon(Icons.check, size: 8, color: Colors.white)
+              : null,
     );
   }
 }

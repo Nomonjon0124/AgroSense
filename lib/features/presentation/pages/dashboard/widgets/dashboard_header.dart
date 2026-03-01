@@ -25,6 +25,7 @@ class DashboardHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
     String localizedGreeting;
     switch (greeting) {
       case 'greeting.morning':
@@ -43,7 +44,6 @@ class DashboardHeader extends StatelessWidget {
         localizedGreeting = greeting;
     }
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         /// Salomlashish va joylashuv
@@ -51,20 +51,31 @@ class DashboardHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              localizedGreeting.s(24).w(700).c(AppColors.textPrimary),
+              Text(
+                localizedGreeting,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  color: colorScheme.onSurface,
+                ),
+              ),
               const Gap(4),
               Row(
                 children: [
                   Icon(
                     Icons.location_on_outlined,
                     size: 16,
-                    color: AppColors.textSecondary,
+                    color: colorScheme.onSurfaceVariant,
                   ),
                   const Gap(4),
                   Expanded(
                     child: Text(
                       location,
-                      style: AppTextStyles.bodySmall,
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -75,25 +86,32 @@ class DashboardHeader extends StatelessWidget {
           ),
         ),
 
-        const Gap(8),
+        const Gap(6),
 
         /// Offline status badge
-        _buildStatusBadge(context),
+        Flexible(
+          fit: FlexFit.loose,
+          child: Align(
+            alignment: Alignment.topRight,
+            child: _buildStatusBadge(context),
+          ),
+        ),
       ],
     );
   }
 
   Widget _buildStatusBadge(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.border, width: 1),
+        border: Border.all(color: colorScheme.outlineVariant, width: 1),
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadow,
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -111,16 +129,32 @@ class DashboardHeader extends StatelessWidget {
             ),
           ),
           const Gap(8),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              (isOffline ? l10n.offline : l10n.online)
-                  .s(10)
-                  .w(700)
-                  .c(AppColors.textSecondary),
-              l10n.lastSyncedAt(lastSyncTime).s(9).c(AppColors.textTertiary),
-            ],
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  isOffline ? l10n.offline : l10n.online,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w700,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                Text(
+                  l10n.lastSyncedAt(lastSyncTime),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 9,
+                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.9),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

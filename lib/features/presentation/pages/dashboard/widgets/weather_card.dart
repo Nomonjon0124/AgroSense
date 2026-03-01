@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -80,28 +80,36 @@ class WeatherCard extends StatelessWidget {
             children: [
               Text('$temperature°', style: AppTextStyles.temperatureLarge),
               const Gap(12),
-              Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: Text(condition, style: AppTextStyles.weatherCondition),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: Text(
+                    condition,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.weatherCondition.copyWith(
+                      fontSize: 18,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
           const Gap(24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          Wrap(
+            spacing: 20,
+            runSpacing: 10,
             children: [
               _buildInfoItem(
                 icon: Icons.water_drop_outlined,
                 label: l10n.humidityUpper,
                 value: '$humidity%',
               ),
-              const Gap(32),
               _buildInfoItem(
                 icon: Icons.air,
                 label: l10n.windUpper,
                 value: '$windSpeed km/h',
               ),
-              const Gap(32),
               _buildInfoItem(
                 icon: Icons.umbrella_outlined,
                 label: l10n.precipUpper,
@@ -119,7 +127,7 @@ class WeatherCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: AppColors.success,
+        color: Theme.of(context).colorScheme.tertiary,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -127,7 +135,7 @@ class WeatherCard extends StatelessWidget {
         children: [
           const Icon(Icons.circle, size: 6, color: Colors.white),
           const Gap(6),
-          l10n.liveData.s(11).w(600).c(Colors.white),
+          l10n.liveData.s(10).w(600).c(Colors.white),
         ],
       ),
     );
@@ -140,18 +148,32 @@ class WeatherCard extends StatelessWidget {
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Icon(icon, size: 14, color: Colors.white70),
             const Gap(4),
-            Text(label, style: AppTextStyles.weatherLabel),
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.weatherLabel,
+            ),
           ],
         ),
         const Gap(4),
-        Text(value, style: AppTextStyles.weatherValue),
+        Text(
+          value,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: AppTextStyles.weatherValue.copyWith(
+            fontSize: 14,
+            color: Colors.white,
+          ),
+        ),
       ],
     );
   }
 }
-

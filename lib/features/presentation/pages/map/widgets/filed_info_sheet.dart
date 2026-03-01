@@ -1,11 +1,12 @@
-﻿part of '../map_part.dart';
+part of '../map_part.dart';
 
 class FieldInfoSheet extends StatelessWidget {
   final FieldEntity field;
   final VoidCallback onClose;
   final VoidCallback onViewAnalysis;
 
-  const FieldInfoSheet({super.key,
+  const FieldInfoSheet({
+    super.key,
     required this.field,
     required this.onClose,
     required this.onViewAnalysis,
@@ -14,14 +15,16 @@ class FieldInfoSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: colorScheme.outlineVariant),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(26),
+            color: Colors.black.withValues(alpha: 0.12),
             blurRadius: 20,
             offset: const Offset(0, -4),
           ),
@@ -36,12 +39,23 @@ class FieldInfoSheet extends StatelessWidget {
               Expanded(
                 child: Row(
                   children: [
-                    field.name.s(18).w(700).c(AppColors.textPrimary),
+                    Expanded(
+                      child: Text(
+                        field.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700,
+                          color: colorScheme.onSurface,
+                        ),
+                      ),
+                    ),
                     const Gap(8),
-                    const Icon(
+                    Icon(
                       Icons.chevron_right,
                       size: 20,
-                      color: AppColors.textSecondary,
+                      color: colorScheme.onSurfaceVariant,
                     ),
                   ],
                 ),
@@ -51,14 +65,16 @@ class FieldInfoSheet extends StatelessWidget {
                 child: Container(
                   width: 32,
                   height: 32,
-                  decoration: const BoxDecoration(
-                    color: AppColors.background,
+                  decoration: BoxDecoration(
+                    color: colorScheme.surfaceContainerHighest.withValues(
+                      alpha: 0.5,
+                    ),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.close,
                     size: 18,
-                    color: AppColors.textSecondary,
+                    color: colorScheme.onSurfaceVariant,
                   ),
                 ),
               ),
@@ -67,21 +83,44 @@ class FieldInfoSheet extends StatelessWidget {
           const Gap(4),
           Row(
             children: [
-              l10n.hectares(field.areaHectares.toString()).s(14).c(AppColors.textSecondary),
+              Expanded(
+                child: Text(
+                  l10n.hectares(field.areaHectares.toString()),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 8),
                 width: 4,
                 height: 4,
-                decoration: const BoxDecoration(
-                  color: AppColors.textTertiary,
+                decoration: BoxDecoration(
+                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
                   shape: BoxShape.circle,
                 ),
               ),
-              field.currentStage.s(14).c(AppColors.textSecondary),
+              Expanded(
+                child: Text(
+                  field.currentStage,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
             ],
           ),
           const Gap(20),
-          Row(
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
             children: [
               StatCard(
                 icon: Icons.water_drop_outlined,
@@ -94,9 +133,8 @@ class FieldInfoSheet extends StatelessWidget {
                 icon: Icons.thermostat_outlined,
                 label: l10n.metricSoilT,
                 value: '${field.soilTemperature.round()}°C',
-                color: AppColors.textPrimary,
+                color: colorScheme.onSurface,
               ),
-              const Gap(12),
               StatCard(
                 icon: Icons.healing_outlined,
                 label: l10n.metricHealth,
@@ -111,9 +149,9 @@ class FieldInfoSheet extends StatelessWidget {
             child: ElevatedButton(
               onPressed: onViewAnalysis,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                backgroundColor: colorScheme.primary,
+                foregroundColor: colorScheme.onPrimary,
+                padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -121,7 +159,18 @@ class FieldInfoSheet extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  l10n.viewFullAnalysis.s(14).w(600).c(Colors.white),
+                  Flexible(
+                    child: Text(
+                      l10n.viewFullAnalysis,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onPrimary,
+                      ),
+                    ),
+                  ),
                   const Gap(8),
                   const Icon(Icons.arrow_forward, size: 18),
                 ],
@@ -145,4 +194,3 @@ class FieldInfoSheet extends StatelessWidget {
     return AppColors.success;
   }
 }
-

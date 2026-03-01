@@ -1,4 +1,4 @@
-﻿part of 'settings_part.dart';
+part of 'settings_part.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -43,7 +43,7 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
                           Text(
                             l10n.settingsTitle,
                             style: TextStyle(
-                              fontSize: 28,
+                              fontSize: 26,
                               fontWeight: FontWeight.w800,
                               color: colorScheme.onSurface,
                             ),
@@ -142,6 +142,7 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
     final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
+      constraints: const BoxConstraints(maxWidth: 132),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: colorScheme.primaryContainer.withValues(alpha: 0.55),
@@ -152,26 +153,33 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
         children: [
           Icon(Icons.wifi, size: 12, color: colorScheme.primary),
           const Gap(6),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l10n.online,
-                style: TextStyle(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w700,
-                  color: colorScheme.primary.withValues(alpha: 0.8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  l10n.online,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w700,
+                    color: colorScheme.primary.withValues(alpha: 0.8),
+                  ),
                 ),
-              ),
-              Text(
-                l10n.syncedJustNow,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                  color: colorScheme.onSurface,
+                Text(
+                  l10n.syncedJustNow,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    color: colorScheme.onSurface,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -206,7 +214,11 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
                   border: Border.all(color: Colors.white70, width: 2),
                   color: Colors.white24,
                 ),
-                child: const Icon(Icons.person_outline, color: Colors.white, size: 36),
+                child: const Icon(
+                  Icons.person_outline,
+                  color: Colors.white,
+                  size: 36,
+                ),
               ),
               const Gap(16),
               Expanded(
@@ -215,8 +227,10 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
                   children: [
                     const Text(
                       'Alex Richardson',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 22,
                         color: Colors.white,
                         fontWeight: FontWeight.w700,
                       ),
@@ -231,7 +245,10 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
                     ),
                     const Gap(8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white24,
                         borderRadius: BorderRadius.circular(30),
@@ -255,9 +272,7 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
           const Gap(16),
           const Row(
             children: [
-              Expanded(
-                child: _StatInfo(label: 'ROLE', value: 'Admin'),
-              ),
+              Expanded(child: _StatInfo(label: 'ROLE', value: 'Admin')),
               Expanded(
                 child: _StatInfo(label: 'MEMBER SINCE', value: 'March 2021'),
               ),
@@ -279,7 +294,9 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.65)),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.65),
+        ),
       ),
       child: Column(
         children: [
@@ -289,7 +306,9 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.8),
+                  color: colorScheme.surfaceContainerHighest.withValues(
+                    alpha: 0.8,
+                  ),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -307,7 +326,7 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
                       l10n.appTheme,
                       style: TextStyle(
                         color: colorScheme.onSurface,
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
@@ -337,24 +356,30 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
                   icon: Icons.wb_sunny_outlined,
                   label: l10n.themeLight,
                   selected: settingsState.themeMode == ThemeMode.light,
-                  onTap: () =>
-                      context.read<AppSettingsCubit>().setThemeMode(ThemeMode.light),
+                  onTap:
+                      () => context.read<AppSettingsCubit>().setThemeMode(
+                        ThemeMode.light,
+                      ),
                 ),
                 _themeButton(
                   context,
                   icon: Icons.dark_mode_outlined,
                   label: l10n.themeDark,
                   selected: settingsState.themeMode == ThemeMode.dark,
-                  onTap: () =>
-                      context.read<AppSettingsCubit>().setThemeMode(ThemeMode.dark),
+                  onTap:
+                      () => context.read<AppSettingsCubit>().setThemeMode(
+                        ThemeMode.dark,
+                      ),
                 ),
                 _themeButton(
                   context,
                   icon: Icons.settings_suggest_outlined,
                   label: l10n.themeSystem,
                   selected: settingsState.themeMode == ThemeMode.system,
-                  onTap: () =>
-                      context.read<AppSettingsCubit>().setThemeMode(ThemeMode.system),
+                  onTap:
+                      () => context.read<AppSettingsCubit>().setThemeMode(
+                        ThemeMode.system,
+                      ),
                 ),
               ],
             ),
@@ -407,9 +432,12 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14),
             color: selected ? colorScheme.surface : Colors.transparent,
-            border: selected
-                ? Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.8))
-                : null,
+            border:
+                selected
+                    ? Border.all(
+                      color: colorScheme.outlineVariant.withValues(alpha: 0.8),
+                    )
+                    : null,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -417,15 +445,28 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
               Icon(
                 icon,
                 size: 16,
-                color: selected ? colorScheme.onSurface : colorScheme.onSurfaceVariant,
+                color:
+                    selected
+                        ? colorScheme.onSurface
+                        : colorScheme.onSurfaceVariant,
               ),
               const Gap(8),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-                  color: selected ? colorScheme.onSurface : colorScheme.onSurfaceVariant,
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                      color:
+                          selected
+                              ? colorScheme.onSurface
+                              : colorScheme.onSurfaceVariant,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -445,13 +486,17 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
-          color: selected ? colorScheme.primary : colorScheme.surfaceContainerHighest.withValues(alpha: 0.7),
+          color:
+              selected
+                  ? colorScheme.primary
+                  : colorScheme.surfaceContainerHighest.withValues(alpha: 0.7),
           borderRadius: BorderRadius.circular(14),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: selected ? colorScheme.onPrimary : colorScheme.onSurfaceVariant,
+            color:
+                selected ? colorScheme.onPrimary : colorScheme.onSurfaceVariant,
             fontWeight: FontWeight.w700,
             fontSize: 12,
           ),
@@ -468,7 +513,9 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.65)),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.65),
+        ),
       ),
       child: Row(
         children: [
@@ -481,14 +528,17 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
                 Text(
                   l10n.notifications,
                   style: TextStyle(
-                    fontSize: 21,
+                    fontSize: 18,
                     fontWeight: FontWeight.w800,
                     color: colorScheme.onSurface,
                   ),
                 ),
                 Text(
                   l10n.notificationsSubtitle,
-                  style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 13),
+                  style: TextStyle(
+                    color: colorScheme.onSurfaceVariant,
+                    fontSize: 13,
+                  ),
                 ),
               ],
             ),
@@ -514,7 +564,9 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.65)),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.65),
+        ),
       ),
       child: Row(
         children: [
@@ -527,14 +579,17 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.w800,
                     color: colorScheme.onSurface,
                   ),
                 ),
                 Text(
                   subtitle,
-                  style: TextStyle(color: colorScheme.onSurfaceVariant, fontSize: 13),
+                  style: TextStyle(
+                    color: colorScheme.onSurfaceVariant,
+                    fontSize: 13,
+                  ),
                 ),
               ],
             ),
@@ -568,26 +623,32 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
             child: const Icon(Icons.logout, color: Colors.red),
           ),
           const Gap(12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l10n.logOut,
-                style: const TextStyle(
-                  color: Colors.red,
-                  fontSize: 26,
-                  fontWeight: FontWeight.w800,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.logOut,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Colors.red,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
-              ),
-              Text(
-                l10n.version('2.4.0'),
-                style: TextStyle(
-                  color: Colors.red.withValues(alpha: 0.75),
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+                Text(
+                  l10n.version('2.4.0'),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.red.withValues(alpha: 0.75),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -601,9 +662,10 @@ class _SettingsViewState extends State<SettingsView> with SettingsMixin {
       height: 48,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: accent
-            ? colorScheme.primaryContainer.withValues(alpha: 0.55)
-            : colorScheme.surfaceContainerHighest.withValues(alpha: 0.7),
+        color:
+            accent
+                ? colorScheme.primaryContainer.withValues(alpha: 0.55)
+                : colorScheme.surfaceContainerHighest.withValues(alpha: 0.7),
       ),
       child: Icon(
         icon,
@@ -636,7 +698,7 @@ class _StatInfo extends StatelessWidget {
         Text(
           value,
           style: const TextStyle(
-            fontSize: 20,
+            fontSize: 18,
             color: Colors.white,
             fontWeight: FontWeight.w800,
           ),
@@ -645,5 +707,3 @@ class _StatInfo extends StatelessWidget {
     );
   }
 }
-
-

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -11,10 +11,11 @@ class FieldStatusSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        l10n.fieldStatusTitle.s(18).w(700).c(AppColors.textPrimary),
+        l10n.fieldStatusTitle.s(17).w(700).c(colorScheme.onSurface),
         const Gap(16),
         FieldStatusCard(
           fieldName: l10n.fieldWheatA,
@@ -80,11 +81,12 @@ class FieldStatusCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
         boxShadow: [
           BoxShadow(
-            color: AppColors.shadow,
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -106,7 +108,16 @@ class FieldStatusCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                fieldName.s(16).w(600).c(AppColors.textPrimary),
+                Text(
+                  fieldName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
                 const Gap(4),
                 Row(
                   children: [
@@ -119,27 +130,45 @@ class FieldStatusCard extends StatelessWidget {
                       ),
                     ),
                     const Gap(6),
-                    statusText.s(13).c(AppColors.textSecondary),
+                    Expanded(
+                      child: Text(
+                        statusText,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ],
             ),
           ),
+          const Gap(8),
           GestureDetector(
             onTap: onActionTap,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              constraints: const BoxConstraints(minWidth: 66, maxWidth: 96),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
-                color: _getActionBackgroundColor(),
+                color: _getActionBackgroundColor(context),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: _getActionBorderColor(), width: 1),
+                border: Border.all(
+                  color: _getActionBorderColor(context),
+                  width: 1,
+                ),
               ),
-              child: Text(
-                actionLabel,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: _getActionTextColor(),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  actionLabel,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: _getActionTextColor(context),
+                  ),
                 ),
               ),
             ),
@@ -160,37 +189,39 @@ class FieldStatusCard extends StatelessWidget {
     }
   }
 
-  Color _getActionBackgroundColor() {
+  Color _getActionBackgroundColor(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     switch (statusType) {
       case FieldStatusType.good:
-        return AppColors.primarySurface;
+        return cs.primaryContainer.withValues(alpha: 0.6);
       case FieldStatusType.warning:
-        return AppColors.surface;
+        return cs.surface;
       case FieldStatusType.waiting:
-        return AppColors.background;
+        return cs.surfaceContainerHighest.withValues(alpha: 0.35);
     }
   }
 
-  Color _getActionBorderColor() {
+  Color _getActionBorderColor(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     switch (statusType) {
       case FieldStatusType.good:
         return AppColors.success;
       case FieldStatusType.warning:
         return AppColors.warning;
       case FieldStatusType.waiting:
-        return AppColors.border;
+        return cs.outlineVariant;
     }
   }
 
-  Color _getActionTextColor() {
+  Color _getActionTextColor(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     switch (statusType) {
       case FieldStatusType.good:
-        return AppColors.primary;
+        return cs.primary;
       case FieldStatusType.warning:
         return AppColors.warning;
       case FieldStatusType.waiting:
-        return AppColors.textSecondary;
+        return cs.onSurfaceVariant;
     }
   }
 }
-

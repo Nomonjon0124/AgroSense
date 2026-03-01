@@ -6,6 +6,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('Alerts filter switches visible cards', (tester) async {
+    final errors = <FlutterErrorDetails>[];
+    final oldHandler = FlutterError.onError;
+    FlutterError.onError = (details) {
+      errors.add(details);
+    };
+    await tester.binding.setSurfaceSize(const Size(320, 690));
+
     await tester.pumpWidget(
       MaterialApp(
         locale: const Locale('en'),
@@ -28,5 +35,12 @@ void main() {
 
     expect(find.text('Frost Warning'), findsNothing);
     expect(find.text('Heavy Rain'), findsOneWidget);
+
+    await tester.binding.setSurfaceSize(null);
+    FlutterError.onError = oldHandler;
+    final overflow = errors.where(
+      (e) => e.exceptionAsString().contains('A RenderFlex overflowed'),
+    );
+    expect(overflow, isEmpty);
   });
 }

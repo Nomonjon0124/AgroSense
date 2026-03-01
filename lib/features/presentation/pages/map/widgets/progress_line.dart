@@ -7,10 +7,11 @@ class ProgressLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Container(
       width: 40,
       height: 2,
-      color: isCompleted ? AppColors.success : AppColors.border,
+      color: isCompleted ? AppColors.success : colorScheme.outlineVariant,
     );
   }
 }

@@ -9,6 +9,7 @@ mixin DashboardMixin on State<DashboardView> {
   }) {
     final currentWeather = data.currentWeather;
     final dailyWeather = data.dailyWeather;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Stack(
       children: [
@@ -70,7 +71,7 @@ mixin DashboardMixin on State<DashboardView> {
             right: 0,
             child: LinearProgressIndicator(
               backgroundColor: Colors.transparent,
-              color: AppColors.primary,
+              color: colorScheme.primary,
             ),
           ),
 
@@ -89,7 +90,7 @@ mixin DashboardMixin on State<DashboardView> {
                   vertical: 12,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.error,
+                  color: colorScheme.error,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(

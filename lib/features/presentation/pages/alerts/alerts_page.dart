@@ -1,8 +1,9 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum AlertFilter { all, critical, warning }
+
 enum AlertCardType { critical, warning, resolved }
 
 class AlertsPage extends StatefulWidget {
@@ -21,11 +22,13 @@ class _AlertsPageState extends State<AlertsPage> {
     final colorScheme = Theme.of(context).colorScheme;
     final alerts = _buildAlerts(l10n);
 
-    final filtered = alerts.where((alert) {
-      if (filter == AlertFilter.all) return true;
-      if (filter == AlertFilter.critical) return alert.type == AlertCardType.critical;
-      return alert.type == AlertCardType.warning;
-    }).toList();
+    final filtered =
+        alerts.where((alert) {
+          if (filter == AlertFilter.all) return true;
+          if (filter == AlertFilter.critical)
+            return alert.type == AlertCardType.critical;
+          return alert.type == AlertCardType.warning;
+        }).toList();
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -45,7 +48,7 @@ class _AlertsPageState extends State<AlertsPage> {
                           Text(
                             l10n.alertsTitle,
                             style: TextStyle(
-                              fontSize: 28,
+                              fontSize: 26,
                               fontWeight: FontWeight.w800,
                               color: colorScheme.onSurface,
                             ),
@@ -59,11 +62,15 @@ class _AlertsPageState extends State<AlertsPage> {
                                 color: colorScheme.primary,
                               ),
                               const Gap(6),
-                              Text(
-                                l10n.farmName,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: colorScheme.onSurfaceVariant,
+                              Expanded(
+                                child: Text(
+                                  l10n.farmName,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: colorScheme.onSurfaceVariant,
+                                  ),
                                 ),
                               ),
                             ],
@@ -71,7 +78,13 @@ class _AlertsPageState extends State<AlertsPage> {
                         ],
                       ),
                     ),
-                    _syncPill(context),
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: _syncPill(context),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -102,36 +115,51 @@ class _AlertsPageState extends State<AlertsPage> {
     final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
+      constraints: const BoxConstraints(maxWidth: 132),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.85),
         borderRadius: BorderRadius.circular(99),
-        border: Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.6)),
+        border: Border.all(
+          color: colorScheme.outlineVariant.withValues(alpha: 0.6),
+        ),
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.wifi_off_rounded, size: 12, color: colorScheme.onSurfaceVariant),
+          Icon(
+            Icons.wifi_off_rounded,
+            size: 12,
+            color: colorScheme.onSurfaceVariant,
+          ),
           const Gap(6),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l10n.offline,
-                style: TextStyle(
-                  fontSize: 9,
-                  fontWeight: FontWeight.w700,
-                  color: colorScheme.onSurfaceVariant.withValues(alpha: 0.9),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  l10n.offline,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w700,
+                    color: colorScheme.onSurfaceVariant.withValues(alpha: 0.9),
+                  ),
                 ),
-              ),
-              Text(
-                l10n.lastSyncedAt('10:00 AM'),
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                  color: colorScheme.onSurface,
+                Text(
+                  l10n.lastSyncedAt('10:00 AM'),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    color: colorScheme.onSurface,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -179,8 +207,16 @@ class _AlertsPageState extends State<AlertsPage> {
         description: '',
         cta: l10n.viewProtectionPlan,
         criticalDetails: [
-          _AlertDetail(l10n.duration, l10n.tonightDuration, Icons.schedule_outlined),
-          _AlertDetail(l10n.affectedAreas, l10n.affectedAreasValue, Icons.map_outlined),
+          _AlertDetail(
+            l10n.duration,
+            l10n.tonightDuration,
+            Icons.schedule_outlined,
+          ),
+          _AlertDetail(
+            l10n.affectedAreas,
+            l10n.affectedAreasValue,
+            Icons.map_outlined,
+          ),
         ],
       ),
       _AlertData(
@@ -227,9 +263,12 @@ class _FilterButton extends StatelessWidget {
           decoration: BoxDecoration(
             color: selected ? colorScheme.surface : Colors.transparent,
             borderRadius: BorderRadius.circular(22),
-            border: selected
-                ? Border.all(color: colorScheme.outlineVariant.withValues(alpha: 0.7))
-                : null,
+            border:
+                selected
+                    ? Border.all(
+                      color: colorScheme.outlineVariant.withValues(alpha: 0.7),
+                    )
+                    : null,
           ),
           child: Text(
             label,
@@ -237,7 +276,10 @@ class _FilterButton extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: selected ? FontWeight.w800 : FontWeight.w500,
-              color: selected ? colorScheme.onSurface : colorScheme.onSurfaceVariant,
+              color:
+                  selected
+                      ? colorScheme.onSurface
+                      : colorScheme.onSurfaceVariant,
             ),
           ),
         ),
@@ -256,19 +298,22 @@ class _AlertCard extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final critical = data.type == AlertCardType.critical;
     final warning = data.type == AlertCardType.warning;
-    final background = critical
-        ? Colors.red.withValues(alpha: 0.05)
-        : warning
+    final background =
+        critical
+            ? Colors.red.withValues(alpha: 0.05)
+            : warning
             ? const Color(0xFFFFF7ED)
             : colorScheme.surface;
-    final border = critical
-        ? Colors.red.withValues(alpha: 0.22)
-        : warning
+    final border =
+        critical
+            ? Colors.red.withValues(alpha: 0.22)
+            : warning
             ? const Color(0xFFFFD6A7)
             : colorScheme.outlineVariant.withValues(alpha: 0.6);
-    final titleColor = critical
-        ? Colors.red.shade700
-        : warning
+    final titleColor =
+        critical
+            ? Colors.red.shade700
+            : warning
             ? const Color(0xFF9F2D00)
             : colorScheme.onSurface;
 
@@ -296,8 +341,8 @@ class _AlertCard extends StatelessWidget {
                   critical
                       ? Icons.notifications_active_outlined
                       : warning
-                          ? Icons.warning_amber_rounded
-                          : Icons.air_outlined,
+                      ? Icons.warning_amber_rounded
+                      : Icons.air_outlined,
                   color: titleColor,
                 ),
               ),
@@ -308,8 +353,10 @@ class _AlertCard extends StatelessWidget {
                   children: [
                     Text(
                       data.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        fontSize: 34,
+                        fontSize: 28,
                         fontWeight: FontWeight.w800,
                         color: titleColor,
                       ),
@@ -317,8 +364,10 @@ class _AlertCard extends StatelessWidget {
                     if (data.level.isNotEmpty)
                       Text(
                         data.level.toUpperCase(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: titleColor.withValues(alpha: 0.75),
                         ),
@@ -328,8 +377,10 @@ class _AlertCard extends StatelessWidget {
               ),
               Text(
                 data.age,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 13,
+                  fontSize: 12,
                   color: titleColor.withValues(alpha: 0.8),
                   fontWeight: FontWeight.w600,
                 ),
@@ -338,7 +389,9 @@ class _AlertCard extends StatelessWidget {
           ),
           const Gap(14),
           if (critical && data.criticalDetails != null)
-            ...data.criticalDetails!.map((detail) => _CriticalDetailTile(detail: detail)),
+            ...data.criticalDetails!.map(
+              (detail) => _CriticalDetailTile(detail: detail),
+            ),
           if (critical) const Gap(6),
           if (critical && data.cta != null)
             SizedBox(
@@ -354,10 +407,12 @@ class _AlertCard extends StatelessWidget {
                 onPressed: () {},
                 child: Text(
                   data.cta!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
-                    fontSize: 14,
+                    fontSize: 13,
                   ),
                 ),
               ),
@@ -376,27 +431,32 @@ class _AlertCard extends StatelessWidget {
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
-                children: data.tags!
-                    .map(
-                      (tag) => Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFEDD4),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          tag,
-                          style: const TextStyle(
-                            color: Color(0xFFCA3500),
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
+                children:
+                    data.tags!
+                        .map(
+                          (tag) => Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFEDD4),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              tag,
+                              style: const TextStyle(
+                                color: Color(0xFFCA3500),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    )
-                    .toList(),
+                        )
+                        .toList(),
               ),
-            if (data.type == AlertCardType.resolved && data.footerStatus != null)
+            if (data.type == AlertCardType.resolved &&
+                data.footerStatus != null)
               Text(
                 data.footerStatus!,
                 style: TextStyle(
@@ -492,5 +552,3 @@ class _AlertDetail {
 
   _AlertDetail(this.label, this.value, this.icon);
 }
-
-

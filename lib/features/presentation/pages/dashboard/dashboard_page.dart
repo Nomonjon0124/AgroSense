@@ -20,11 +20,11 @@ class DashboardView extends StatefulWidget {
   State<DashboardView> createState() => _DashboardViewState();
 }
 
-class _DashboardViewState extends State<DashboardView> with DashboardMixin{
+class _DashboardViewState extends State<DashboardView> with DashboardMixin {
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: AppColors.background,
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
@@ -32,7 +32,7 @@ class _DashboardViewState extends State<DashboardView> with DashboardMixin{
             // BLoC listener orqali yangilanishni kutish
             await Future.delayed(const Duration(seconds: 1));
           },
-          color: AppColors.primary,
+          color: colorScheme.primary,
           child: BlocBuilder<DashboardBloc, DashboardState>(
             builder: (context, state) {
               // Loading holati
@@ -79,7 +79,4 @@ class _DashboardViewState extends State<DashboardView> with DashboardMixin{
       ),
     );
   }
-
-
 }
-

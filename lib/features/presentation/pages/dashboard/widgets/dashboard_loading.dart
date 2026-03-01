@@ -138,6 +138,7 @@ class _SkeletonBoxState extends State<_SkeletonBox>
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return AnimatedBuilder(
       animation: _animation,
       builder: (context, child) {
@@ -145,7 +146,9 @@ class _SkeletonBoxState extends State<_SkeletonBox>
           width: widget.width,
           height: widget.height,
           decoration: BoxDecoration(
-            color: Colors.grey.withAlpha((_animation.value * 255).round()),
+            color: colorScheme.surfaceContainerHighest.withValues(
+              alpha: _animation.value,
+            ),
             borderRadius: BorderRadius.circular(widget.borderRadius),
           ),
         );

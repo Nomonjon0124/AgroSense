@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -23,23 +23,35 @@ class _ForecastSectionState extends State<ForecastSection> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            l10n.forecastTitle.s(18).w(700).c(AppColors.textPrimary),
+            Expanded(
+              child: Text(
+                l10n.forecastTitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w700,
+                  color: colorScheme.onSurface,
+                ),
+              ),
+            ),
             TextButton(
               onPressed: () {},
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  l10n.seeAll.s(14).w(500).c(AppColors.primary),
+                  l10n.seeAll.s(13).w(500).c(colorScheme.primary),
                   const Gap(4),
-                  const Icon(
+                  Icon(
                     Icons.chevron_right,
                     size: 18,
-                    color: AppColors.primary,
+                    color: colorScheme.primary,
                   ),
                 ],
               ),
@@ -100,16 +112,30 @@ class _ForecastDayCard extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        constraints: const BoxConstraints(minWidth: 70),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primarySurface : AppColors.surface,
+          color:
+              isSelected
+                  ? Theme.of(
+                    context,
+                  ).colorScheme.primaryContainer.withValues(alpha: 0.6)
+                  : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
-          border: isSelected
-              ? Border.all(color: AppColors.primaryLight, width: 1.5)
-              : Border.all(color: AppColors.border),
+          border:
+              isSelected
+                  ? Border.all(
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.7),
+                    width: 1.5,
+                  )
+                  : Border.all(
+                    color: Theme.of(context).colorScheme.outlineVariant,
+                  ),
           boxShadow: [
             BoxShadow(
-              color: AppColors.shadow,
+              color: Colors.black.withValues(alpha: 0.06),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -120,10 +146,15 @@ class _ForecastDayCard extends StatelessWidget {
           children: [
             Text(
               day,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                color: isSelected ? AppColors.primary : AppColors.textSecondary,
+                color:
+                    isSelected
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
             const Gap(8),
@@ -136,9 +167,12 @@ class _ForecastDayCard extends StatelessWidget {
             Text(
               '$temperature°',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 15,
                 fontWeight: FontWeight.bold,
-                color: isSelected ? AppColors.primaryDark : AppColors.textPrimary,
+                color:
+                    isSelected
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ],
@@ -147,4 +181,3 @@ class _ForecastDayCard extends StatelessWidget {
     );
   }
 }
-

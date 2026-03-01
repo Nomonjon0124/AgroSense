@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -15,6 +15,7 @@ class DashboardErrorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -25,22 +26,22 @@ class DashboardErrorWidget extends StatelessWidget {
               width: 100,
               height: 100,
               decoration: BoxDecoration(
-                color: AppColors.error.withAlpha(26),
+                color: colorScheme.errorContainer.withValues(alpha: 0.55),
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.cloud_off_outlined,
                 size: 48,
-                color: AppColors.error,
+                color: colorScheme.error,
               ),
             ),
             const Gap(24),
-            l10n.dashboardLoadFailed.s(20).w(600).c(AppColors.textPrimary),
+            l10n.dashboardLoadFailed.s(19).w(600).c(colorScheme.onSurface),
             const Gap(12),
             Text(
               message,
               style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.textSecondary,
+                color: colorScheme.onSurfaceVariant,
               ),
               textAlign: TextAlign.center,
             ),
@@ -49,8 +50,8 @@ class DashboardErrorWidget extends StatelessWidget {
               ElevatedButton.icon(
                 onPressed: onRetry,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
+                  backgroundColor: colorScheme.primary,
+                  foregroundColor: colorScheme.onPrimary,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 12,
@@ -66,15 +67,17 @@ class DashboardErrorWidget extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.info.withAlpha(26),
+                color: colorScheme.primaryContainer.withValues(alpha: 0.35),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.info.withAlpha(51)),
+                border: Border.all(
+                  color: colorScheme.primary.withValues(alpha: 0.3),
+                ),
               ),
               child: Row(
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.lightbulb_outline,
-                    color: AppColors.info,
+                    color: colorScheme.primary,
                     size: 20,
                   ),
                   const Gap(12),
@@ -82,7 +85,7 @@ class DashboardErrorWidget extends StatelessWidget {
                     child: Text(
                       l10n.dashboardTip,
                       style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.info,
+                        color: colorScheme.primary,
                       ),
                     ),
                   ),
@@ -95,4 +98,3 @@ class DashboardErrorWidget extends StatelessWidget {
     );
   }
 }
-
